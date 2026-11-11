@@ -5,6 +5,8 @@ A portfolio site about the ways humans share, in five domains: Creative, Embodie
 - `index.html` is the whole site in one file: the layout, the edit mode and all the page text.
 - Live (private) version: https://claude.ai/artifact/AQBgUdYFviazTEc5LdvAm7
 
-Photos, audio and video are stored with the claude.ai artifact, not in this repository.
-The page refers to them by `/_blob/...` addresses, so they only load on the claude.ai version.
-Keep your original photo and audio files somewhere safe as well.
+- `media/` holds every photo (`.jpg`) and recording (`.webm`) the site uses, copied from the claude.ai version.
+  Recordings are `.webm` because the site converts audio into that format when you upload it.
+
+To view this copy, serve the folder locally (for example `python3 -m http.server`, then visit http://localhost:8000).
+Editing works only on the claude.ai version; this copy is a backup.
