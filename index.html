@@ -1,0 +1,1047 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>The Sharing Project</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&amp;family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&amp;family=Figtree:wght@400;500;600&amp;family=Caveat:wght@500&amp;display=swap">
+<style id="sp-style">
+/* Layout: a photo album on lake-mist paper. One reading column, photos as white-bordered prints, gold (the Odyssey) as the single accent. */
+:root{
+  --paper:#EDF0EE; --surface:#F8F9F7; --ink:#1B2630; --muted:#56626B; --line:#D2D8D5;
+  --gold:#94690F; --gold-soft:#EBDDB5; --lake:#2C5466; --print:#FFFFFF; --print-ink:#2A2620;
+  --danger:#A0352B; --shadow:0 1px 2px rgba(27,38,48,.10),0 6px 18px rgba(27,38,48,.10);
+  --f-display:"Gloock",Georgia,"Times New Roman",serif;
+  --f-body:"Newsreader",Georgia,"Times New Roman",serif;
+  --f-ui:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-hand:"Caveat","Bradley Hand","Segoe Print",cursive;
+  --measure:40rem;
+  /* domain colors */
+  --c-creative:#3E8E57; --c-interdependent:#7A5AAF; --c-social:#E59E58; --c-embodied:#3B74B5; --c-emotional:#C23E38;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#11171C; --surface:#1A2229; --ink:#E7E5DF; --muted:#9EA8AF; --line:#2B353D;
+  --gold:#D8AC50; --gold-soft:#3A3018; --lake:#8DB5C7; --print:#E9E6DF; --print-ink:#2A2620;
+  --danger:#E08A80; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
+  --c-creative:#6CC28A; --c-interdependent:#A88DDB; --c-social:#F2B67A; --c-embodied:#71A5E0; --c-emotional:#E56C63; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#11171C; --surface:#1A2229; --ink:#E7E5DF; --muted:#9EA8AF; --line:#2B353D;
+  --gold:#D8AC50; --gold-soft:#3A3018; --lake:#8DB5C7; --print:#E9E6DF; --print-ink:#2A2620;
+  --danger:#E08A80; --shadow:0 1px 2px rgba(0,0,0,.4),0 8px 22px rgba(0,0,0,.35);
+  --c-creative:#6CC28A; --c-interdependent:#A88DDB; --c-social:#F2B67A; --c-embodied:#71A5E0; --c-emotional:#E56C63; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:1.125rem;line-height:1.65}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--paper)}
+a{color:var(--lake)}
+:focus-visible{outline:2px solid var(--gold);outline-offset:3px;border-radius:2px}
+button{font:inherit;color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:400;text-wrap:balance;line-height:1.12;margin:0}
+.wrap{max-width:68rem;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font-family:var(--f-ui);font-size:.75rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:1rem;min-height:3.75rem}
+.brand{font-family:var(--f-display);font-size:1.3rem;text-decoration:none;color:var(--ink);white-space:nowrap;margin-right:auto}
+.nav{display:flex;gap:.15rem;flex-wrap:wrap;font-family:var(--f-ui);font-size:.9rem}
+.nav a{text-decoration:none;color:var(--muted);padding:.4rem .6rem;border-radius:6px;white-space:nowrap}
+.nav a:hover{color:var(--ink);background:var(--surface)}
+.nav a[aria-current="page"]{color:var(--ink);background:var(--gold-soft)}
+.nav .sep{width:1px;background:var(--line);margin:.35rem .3rem}
+.menu-btn{display:none;font-family:var(--f-ui);font-size:.9rem;background:none;border:1px solid var(--line);border-radius:6px;padding:.4rem .7rem;cursor:pointer}
+.edit-btn{font-family:var(--f-ui);font-size:.85rem;font-weight:500;background:none;border:1px solid var(--gold);color:var(--gold);border-radius:999px;padding:.35rem .85rem;cursor:pointer;white-space:nowrap}
+.edit-btn[aria-pressed="true"]{background:var(--gold);color:var(--paper)}
+@media (max-width:1180px){
+  .menu-btn{display:inline-block}
+  .nav{display:none;position:absolute;left:0;right:0;top:100%;flex-direction:column;background:var(--paper);border-bottom:1px solid var(--line);padding:.5rem max(16px,env(safe-area-inset-right,0px)) 1rem max(16px,env(safe-area-inset-left,0px))}
+  .nav.open{display:flex}
+  .nav a{padding:.65rem .6rem;font-size:1rem}
+  .nav .sep{width:auto;height:1px;margin:.3rem 0}
+}
+
+/* page header */
+main{padding-block:2.5rem 5rem}
+.hero{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);gap:3rem;align-items:center;padding-block:1.5rem 3rem}
+.hero h1{font-size:clamp(2.6rem,7vw,5rem)}
+.hero .lede{font-size:1.3rem;line-height:1.5;color:var(--muted);max-width:32rem;margin:1.25rem 0 0}
+.hero .by{font-family:var(--f-ui);font-size:.9rem;color:var(--muted);margin-top:1rem}
+.page-head{max-width:var(--measure);margin:0 auto;padding-block:1rem 2.5rem}
+.page-head h1{font-size:clamp(2.4rem,6vw,4rem);margin-top:.4rem}
+.page-head .cover{margin-top:2rem}
+.epi{margin:1.75rem 0 0;font-size:1.2rem;line-height:1.6;color:var(--ink)}
+.epi-label{font-family:var(--f-ui);font-size:.8rem;color:var(--muted);margin-top:.75rem}
+.epi p{margin:0}
+.epi p::before{content:"\201C";font-family:var(--f-display);color:var(--gold);font-size:2.2rem;line-height:0;vertical-align:-.45rem;margin-right:.15rem}
+@media (max-width:760px){.hero{grid-template-columns:1fr;gap:2rem}}
+
+/* prints (photos) */
+.print{display:block;background:var(--print);padding:10px 10px 0;box-shadow:var(--shadow);border:0;cursor:zoom-in;text-align:left;width:100%}
+.print img{display:block;width:100%;height:auto;max-width:100%}
+.print .cap{display:block;font-family:var(--f-hand);font-size:1.3rem;color:var(--print-ink);padding:.35rem .2rem .55rem;line-height:1.2;min-height:.9rem}
+.tilt-a{transform:rotate(-1.2deg)} .tilt-b{transform:rotate(.9deg)}
+.cover-empty{aspect-ratio:4/5;max-width:100%;display:grid;place-items:center;border:2px dashed var(--line);border-radius:4px;color:var(--muted);font-family:var(--f-ui);font-size:.9rem;text-align:center;padding:1rem}
+
+/* sections & blocks */
+.section{max-width:var(--measure);margin:0 auto;padding-block:1.5rem}
+.section.wide{max-width:60rem}
+.sec-head{margin-bottom:1.25rem;scroll-margin-top:8rem}
+.sec-head h2{font-size:clamp(1.7rem,4vw,2.3rem)}
+.sec-head .kicker{font-family:var(--f-ui);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-top:.3rem}
+.blocks{display:flex;flex-direction:column;gap:2.25rem}
+.b-text h3{font-size:1.5rem;margin-bottom:.6rem}
+.b-text p{margin:0 0 1em}
+.b-text p:last-child{margin-bottom:0}
+.b-text.essay p:first-of-type::first-letter{font-family:var(--f-display);float:left;font-size:4.1rem;line-height:.85;padding:.35rem .5rem 0 0;color:var(--gold)}
+.b-quote{margin:0;padding:.25rem 0 .25rem 1.4rem;border-left:2px solid var(--gold-soft)}
+.b-quote blockquote{margin:0;font-style:italic;font-size:1.25rem;line-height:1.55}
+.b-quote figcaption{font-family:var(--f-ui);font-size:.85rem;color:var(--muted);margin-top:.5rem}
+.b-photos{display:grid;grid-template-columns:repeat(auto-fill,minmax(13rem,1fr));gap:1.6rem;align-items:start}
+.b-photos.one{grid-template-columns:1fr}
+.b-photos.two{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media (max-width:520px){.b-photos.two{grid-template-columns:1fr}}
+.section.wide .b-photos{grid-template-columns:repeat(auto-fill,minmax(15rem,1fr))}
+.b-story{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2rem;align-items:center}
+.b-story.flip .s-img{order:2}
+.b-story h3{font-size:1.45rem;margin-bottom:.5rem}
+.b-story p{margin:0 0 .8em}
+@media (max-width:640px){.b-story{grid-template-columns:1fr}.b-story.flip .s-img{order:0}}
+.media-title{font-family:var(--f-display);font-size:1.3rem;margin:0 0 .5rem}
+.media-cap{font-size:1rem;color:var(--muted);margin:.6rem 0 0}
+.b-video video{display:block;width:100%;max-width:100%;background:#000;border-radius:3px;box-shadow:var(--shadow)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.2rem;display:flex;gap:1.1rem;align-items:center}
+.card .grow{flex:1;min-width:0}
+.card h3{font-size:1.25rem}
+.card .sub{font-family:var(--f-ui);font-size:.9rem;color:var(--muted);margin-top:.15rem}
+.card .note{font-size:1rem;margin:.6rem 0 0}
+.b-audio{flex-wrap:wrap}
+.b-audio .thumb{width:7.5rem;flex:none;padding:6px 6px 0;cursor:zoom-in}
+.b-audio .thumb .cap{display:none}
+.b-audio .thumb img{aspect-ratio:1;object-fit:cover}
+.b-audio audio{width:100%;margin-top:.75rem;max-width:100%}
+.b-aud{display:flex;flex-direction:column;gap:1rem}
+.b-aud > .print{max-width:34rem}
+.aud-bar{align-items:flex-start}
+.player{display:flex;align-items:center;gap:.75rem;margin-top:.85rem}
+.player .pp{flex:none;width:2.6rem;height:2.6rem;border-radius:50%;border:0;background:var(--ink);color:var(--surface);font:inherit;font-size:1rem;line-height:1;cursor:pointer;display:grid;place-items:center}
+.player .pp:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.player input[type=range]{flex:1;min-width:0;accent-color:var(--gold);height:1.6rem;margin:0}
+.player .t{flex:none;font-variant-numeric:tabular-nums;font-size:.85rem;color:var(--muted,inherit);min-width:6.6rem;text-align:right}
+@media (max-width:520px){.player .t{min-width:0;font-size:.8rem}}
+.jgrid{display:flex;flex-wrap:wrap;gap:.6rem;max-width:100%}
+.jgrid::after{content:"";flex:999 1 0}
+.jgrid > .print{--r:1.333;flex:var(--r) 1 calc(var(--r) * 9.5rem);width:auto;padding:6px 6px 0;min-width:0}
+.jgrid > .print img{aspect-ratio:var(--r);object-fit:cover;height:auto}
+.jgrid > .print .cap{font-size:1.1rem;padding:.25rem .15rem .35rem}
+.jgrid > .print .cap:empty{min-height:6px;padding:0}
+.jgrid.one > .print{flex:0 1 calc(var(--r) * 20rem);max-width:100%}
+.jgrid.one::after{display:none}
+.disc{width:3.6rem;height:3.6rem;flex:none;border-radius:50%;background:radial-gradient(circle,var(--gold) 0 14%,var(--ink) 15% 17%,var(--lake) 18% 100%);box-shadow:inset 0 0 0 3px color-mix(in srgb,var(--surface) 30%,transparent)}
+.doc-ico{width:3rem;height:3.6rem;flex:none;border:1.5px solid var(--muted);border-radius:3px 12px 3px 3px;display:grid;place-items:end center;padding-bottom:.4rem;font-family:var(--f-ui);font-size:.65rem;font-weight:600;color:var(--muted);letter-spacing:.05em;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:.4rem;font-family:var(--f-ui);font-size:.9rem;font-weight:500;border-radius:999px;padding:.5rem 1rem;text-decoration:none;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--paper);white-space:nowrap}
+.btn.ghost{background:none;color:var(--ink);border-color:var(--line)}
+.btn.small{font-size:.8rem;padding:.3rem .7rem}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.lesson{display:block}
+.lesson .pills{display:flex;flex-wrap:wrap;gap:.4rem;margin-top:.6rem}
+.pill{font-family:var(--f-ui);font-size:.75rem;padding:.2rem .6rem;border-radius:999px;background:var(--gold-soft);color:var(--ink)}
+.lesson .files{display:flex;flex-wrap:wrap;gap:.5rem;margin-top:1rem}
+.lesson-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(19rem,1fr));gap:1.25rem}
+.empty-note{font-family:var(--f-ui);font-size:.95rem;color:var(--muted);padding:1.25rem;border:1px dashed var(--line);border-radius:10px;text-align:center}
+
+/* home domain cards */
+.domains{padding-block:3rem 1.5rem}
+.domains > h2{font-size:clamp(1.8rem,4vw,2.6rem);margin-bottom:1.75rem;text-align:left}
+.dgrid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1.1rem}
+@media (max-width:980px){.dgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:520px){.dgrid{grid-template-columns:1fr}}
+.dcard{display:flex;flex-direction:column;gap:.6rem;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1rem;transition:transform .15s,border-color .15s}
+.dcard:hover{transform:translateY(-2px);border-color:var(--gold)}
+.dcard .ph{aspect-ratio:4/3;background:var(--paper);border-radius:4px;overflow:hidden;display:grid;place-items:center;font-family:var(--f-display);font-size:2.6rem;color:var(--gold)}
+.dcard .ph img{width:100%;height:100%;object-fit:cover}
+.dcard h3{font-size:1.35rem}
+.dcard p{margin:0;font-size:.98rem;line-height:1.5;color:var(--muted)}
+.dcard .n{font-family:var(--f-ui);font-size:.75rem;color:var(--gold);font-weight:600;letter-spacing:.08em}
+.dlist{display:flex;flex-direction:column;gap:1.25rem}
+.drow{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:2.5rem;align-items:center;padding:1.75rem;background:var(--surface);border:1.5px solid var(--dc,var(--line));border-radius:12px}
+.drow .d-txt .n{color:var(--dc,var(--gold))}
+.drop.slim{aspect-ratio:auto;padding:1.4rem}
+.drow.solo{grid-template-columns:minmax(0,1fr)}
+.drow:nth-child(even):not(.solo) .d-photo{order:-1}
+.d-txt{display:flex;flex-direction:column;gap:.6rem;align-items:flex-start;min-width:0}
+.d-txt .n{font-family:var(--f-ui);font-size:.75rem;color:var(--gold);font-weight:600;letter-spacing:.1em}
+.d-txt h3{font-size:clamp(1.8rem,4vw,2.4rem)}
+.d-txt p,.d-txt .sum{margin:0;color:var(--muted);font-size:1.05rem;line-height:1.55;max-width:30rem}
+.d-photo{display:flex;flex-direction:column;gap:.8rem;min-width:0}
+.share-h{font-family:var(--f-ui);font-size:.8rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.share-cap{font-family:var(--f-hand);font-size:1.35rem;color:var(--ink)}
+.drop{aspect-ratio:4/3;width:100%;display:grid;place-items:center;border:2px dashed var(--gold);border-radius:6px;background:color-mix(in srgb,var(--gold-soft) 30%,transparent);color:var(--ink);font-family:var(--f-ui);font-size:.95rem;cursor:pointer}
+.drop:hover{background:color-mix(in srgb,var(--gold-soft) 55%,transparent)}
+@media (max-width:700px){.drow{grid-template-columns:minmax(0,1fr);gap:1.5rem}.drow:nth-child(even):not(.solo) .d-photo{order:0}}
+
+/* sense pills */
+.senses{position:sticky;top:calc(env(safe-area-inset-top,0px) + 3.8rem);z-index:10;background:color-mix(in srgb,var(--paper) 94%,transparent);backdrop-filter:blur(6px);padding-block:.7rem;margin-bottom:1rem;border-bottom:1px solid var(--line)}
+.senses .row{display:flex;gap:.5rem;overflow-x:auto;max-width:var(--measure);margin:0 auto;scrollbar-width:none}
+.senses button{font-family:var(--f-ui);font-size:.9rem;border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:.4rem .9rem;cursor:pointer;white-space:nowrap}
+.senses button small{color:var(--muted);font-size:.75rem;margin-left:.3rem}
+.senses button:hover{border-color:var(--gold)}
+
+/* prev/next */
+.pager{max-width:var(--measure);margin:3.5rem auto 0;display:grid;grid-template-columns:1fr 1fr;gap:1rem;border-top:1px solid var(--line);padding-top:1.5rem}
+.pager a{text-decoration:none;color:var(--ink);display:flex;flex-direction:column;gap:.15rem;padding:.6rem 0}
+.pager a.next{text-align:right;grid-column:2}
+.pager small{font-family:var(--f-ui);font-size:.8rem;color:var(--muted)}
+.pager span{font-family:var(--f-display);font-size:1.4rem}
+footer{border-top:1px solid var(--line);padding-block:2rem;font-family:var(--f-ui);font-size:.85rem;color:var(--muted)}
+
+/* edit mode */
+[data-ed]{cursor:text;border-radius:3px;outline:1px dashed color-mix(in srgb,var(--gold) 45%,transparent);outline-offset:4px;min-width:3rem}
+[data-ed]:hover{outline-color:var(--gold)}
+[data-ed]:focus{outline:2px solid var(--gold);background:color-mix(in srgb,var(--gold-soft) 40%,transparent)}
+[data-ed].pre{white-space:pre-wrap}
+[data-ed]:empty::before{content:attr(data-ph);color:var(--muted);font-family:var(--f-ui);font-size:.85rem;font-style:normal;letter-spacing:0;text-transform:none}
+.ed-tools{display:none}
+.editing .ed-tools{display:flex}
+.ed-bar{gap:.35rem;flex-wrap:wrap;font-family:var(--f-ui)}
+.ed-bar button,.ed-add button{font-family:var(--f-ui);font-size:.78rem;border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:6px;padding:.25rem .55rem;cursor:pointer}
+.ed-bar button:hover,.ed-add button:hover{border-color:var(--gold)}
+.ed-bar button.warn{color:var(--danger);border-color:var(--danger)}
+.editing .blk{position:relative;outline:1px dashed var(--line);outline-offset:10px;border-radius:2px}
+.blk .ed-bar{position:absolute;top:-1.9rem;right:-10px;z-index:3}
+.editing .blk{margin-top:1.4rem}
+.ed-add{flex-wrap:wrap;gap:.4rem;align-items:center;padding:.8rem;border:1.5px dashed var(--gold);border-radius:10px;margin-top:1.5rem;background:color-mix(in srgb,var(--gold-soft) 35%,transparent)}
+.ed-add .lbl{font-family:var(--f-ui);font-size:.8rem;color:var(--muted);margin-right:.25rem}
+.ed-add button.sug{border-color:var(--gold);font-weight:600}
+.sec-tools{margin-top:.6rem}
+.page-tools{margin:1rem 0 0}
+.add-sec{justify-content:center;max-width:var(--measure);margin:2rem auto 0}
+.savebar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--ink);color:var(--paper);font-family:var(--f-ui);font-size:.9rem;padding-block:.7rem calc(.7rem + env(safe-area-inset-bottom,0px))}
+.savebar .wrap{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap}
+.savebar .msg{margin-right:auto}
+.savebar .btn{background:var(--gold);border-color:var(--gold);color:#1B1408}
+.savebar .btn.ghost{background:none;color:var(--paper);border-color:color-mix(in srgb,var(--paper) 40%,transparent)}
+.editing main{padding-bottom:8rem}
+.banner{background:var(--gold-soft);font-family:var(--f-ui);font-size:.9rem}
+.banner .wrap{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;padding-block:.6rem}
+.banner .wrap span{margin-right:auto}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(5rem + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--paper);font-family:var(--f-ui);font-size:.9rem;padding:.6rem 1rem;border-radius:8px;z-index:60;max-width:calc(100% - 32px)}
+
+/* dialogs */
+dialog{border:0;padding:0;background:var(--surface);color:var(--ink);border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,.35);width:min(36rem,calc(100% - 32px));max-height:calc(100% - 32px)}
+dialog::backdrop{background:rgba(10,14,18,.55)}
+.dlg{display:flex;flex-direction:column;max-height:calc(100vh - 32px)}
+.dlg header{padding:1.1rem 1.25rem .5rem;font-family:var(--f-display);font-size:1.4rem}
+.dlg .body{padding:.5rem 1.25rem 1rem;overflow:auto;display:flex;flex-direction:column;gap:1rem}
+.dlg .foot{display:flex;justify-content:flex-end;gap:.5rem;padding:.9rem 1.25rem;border-top:1px solid var(--line)}
+.fld{display:flex;flex-direction:column;gap:.3rem;font-family:var(--f-ui);font-size:.85rem}
+.fld > span{font-weight:600}
+.fld .hint{font-weight:400;color:var(--muted);font-size:.8rem}
+.fld input[type=text],.fld input[type=url],.fld textarea,.fld select{font:inherit;font-family:var(--f-ui);font-size:.95rem;padding:.55rem .65rem;border:1px solid var(--line);border-radius:6px;background:var(--paper);color:var(--ink);width:100%}
+.fld textarea{font-family:var(--f-body);font-size:1rem;line-height:1.5;resize:vertical}
+.filebox{display:flex;gap:.75rem;align-items:center;flex-wrap:wrap;padding:.6rem;border:1px solid var(--line);border-radius:6px;background:var(--paper)}
+.filebox img{width:4rem;height:4rem;object-fit:cover;border-radius:3px}
+.filebox .fname{flex:1;min-width:0;overflow-wrap:anywhere;color:var(--muted)}
+.filebox label.btn{cursor:pointer}
+.filebox input[type=file]{position:absolute;width:1px;height:1px;opacity:0}
+.status{font-family:var(--f-ui);font-size:.8rem;color:var(--gold)}
+.status.err{color:var(--danger)}
+.plist{display:flex;flex-direction:column;gap:.5rem}
+.prow{display:flex;gap:.6rem;align-items:center}
+.prow img{width:3.5rem;height:3.5rem;object-fit:cover;border-radius:3px;flex:none}
+.prow input{flex:1;min-width:0}
+.prow button{flex:none}
+
+/* lightbox */
+#lb{width:min(64rem,calc(100% - 24px));background:transparent;box-shadow:none}
+#lb::backdrop{background:rgba(8,10,12,.9)}
+.lbx{display:flex;flex-direction:column;align-items:center;gap:.75rem}
+.lbx img{max-height:78vh;max-width:100%;width:auto;background:var(--print);padding:10px;box-shadow:var(--shadow)}
+.lbx .cap{font-family:var(--f-hand);font-size:1.6rem;color:#F2EFE8;text-align:center}
+.lbx .ctl{display:flex;gap:.6rem}
+.lbx .ctl button{font-family:var(--f-ui);background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.45rem 1rem;cursor:pointer}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+<div id="app"></div>
+<script id="sp-data" type="application/json">{"rev":"cfr2g9gn","pages":{"home":{"title":"The Sharing Project","lede":"","by":"","cover":{"id":"b54f44e08c62e53545c7c229b7babe56","url":"/_blob/b54f44e08c62e53545c7c229b7babe56","name":"IMG_0743.jpeg"},"sections":[{"id":"welcome","title":"Introduction","kicker":"","suggest":["text"],"blocks":[{"id":"welcome-text","type":"text","heading":"","body":"The Sharing Project is an exploration of the ways humans share. Humans have an incredible ability to share, across both space and time. The Sharing Project is a personal exploration of this ability under five domains: creative, social, emotional, embodied, and interdependent. "}]}]},"inspiration":{"title":"Inspiration","lede":"","cover":{"id":"e75289df29aab036cccbf9ac030f2177","url":"/_blob/e75289df29aab036cccbf9ac030f2177","name":"IMG_0728.jpeg"},"sections":[{"id":"intro","title":"","kicker":"","suggest":["photos","story","text"],"blocks":[{"id":"essay-1","type":"text","heading":"","body":"There are only two people I know who have never turned on a computer.\n\nThe first is my Grandpa, who was born in 1939, and he has never turned on a computer in his life. Impressively, he never laid his enormous, scar-ridden fingers on a keyboard, never opened Safari or waited for a screen to load. He wouldn’t recognize the Windows symbol as more than four playful squares, and would certainly guess that the Apple symbol was a tiny mirror shaped like a common fruit.\n\n“I can hardly see my handsome face!” he’d say if he were looking at the back of my laptop.","essay":true},{"id":"essay-2","type":"text","heading":"","body":"It’s not that he didn’t have access to a computer. I sat at a desktop, which was tan, made dramatic clicking and whirring noises, and smelled of hard-working wires, mere feet from where he lay his head every night for over 20 years. I played countless hours of “Crazy Taxi” with my cousins while he was puttering around in his workshop. Eventually, he technically owned a laptop, one with a sticky note taped on the outside that contained all the passwords to access every penny he owned and his personal health information.\n\nBut Grandpa simply never had the need, or interest, to power on or flip open the machine around which my whole life now revolves. My Nana took care of it all. She had an email, paid the bills, and, of course, got scammed a few times in the digital world. Nana even got the hang of online shopping and supported Jeff Bezos in her last ten years.\n\nIf Grandpa ever needed to get in contact with anyone, he flipped through the Rolodex, found their number, and gave them a call on a large corded phone. If my he ever needed something, he would gas up the old gold minivan and drive himself, quickly, precisely, and sometimes dangerously, to the store it was most likely to be shelved in. If he couldn’t find it there, he’d wait to see it in newspaper coupons or in a magazine, point at it and beckon my Nana.\n\n“Helen, I found it!”"},{"id":"essay-3","type":"text","heading":"","body":"Now, Grandpa is in memory care. My Nana is gone, and there are no computers. The only technology he mentions now is the nonexistent telegram he received from his long-dead friend. The other day, he received news that he’d won the lottery, but only through Morse code. \n\nThe second person I know who has never turned on a computer is my baby niece. Not to compare, but I find her weeks-old streak much less impressive than my Grandpa’s 87-year-old one, especially considering she can’t even hold her own head upright."},{"id":"essay-4","type":"text","heading":"","body":"Both of these lives feels far away from me. In the last few months, my life has been thinking about and using computers in a large, inestimable number. The one-year graduate school program I began in August—Learning Design, Innovation, and Technology—has challenged me to think about computers into the night. In the course, we are asked to think about how to design technology, mostly digital, to improve education. And for the most part, I am in amazement. I’m inspired by my professors’ and my peers’ work; they’ve made places and tools for children to play and express themselves and created ways to improve access to education.\n\nI am also deeply grateful for how technology has changed the lives of children in special education, those who otherwise would not be able to share their incredible ideas and beautiful feelings with the world. I hopeful that we can move education towards intent.\n\nWe have also been taught to be cautious, and I have experienced unease technology, namely AI platforms. My professor warns us of the unpredictable nature of AI-written platforms and the effects they have on early childhood; my peers are wary of the effects it’s having on their understanding, and my friends who are high school teachers are frustrated by the AI-written papers turned in by students.\n\nWe are white-knuckling our way into the future. And as I attempt to think responsibly and optimistically about this technology, I think about these two people, the old man and this baby girl, who exist outside of the digital world, outside of memory, on the opposite ends of life. I think about what Grandpa shared with others, without computers, outside of “sharing\" an Instagram post or a Google Drive folder, that made Grandpa’s life, by all accounts, so miraculous and full. And I think, if people share his life the way he did, in the five domains, but not exclusively these, then we will optimize our use of tools for ourselves and for the common good."},{"id":"ph-creative","type":"photos","title":"","items":[{"id":"b9cd5cfce236072065c9a2dd54891039","url":"/_blob/b9cd5cfce236072065c9a2dd54891039","caption":""},{"id":"82aa3e4adf8cf697597ae50079e2679a","url":"/_blob/82aa3e4adf8cf697597ae50079e2679a","caption":""}]},{"id":"dom-creative","type":"text","heading":"Creative","body":"Grandpa shared his creativity, not in oil painting or story writing, but in other, expectedly useful ways. Upon noticing that most of the crayons in our blue plastic box were broken, he found a block of wood and drilled 100 uniform holes into it, placing a new set of crayons carefully upright. After angrily observing the squirrels climbing the porch railing and eating from his bird feeder, he greased up the deck with a thick oil. After the squirrels figured out that they could jump from the opposite railing, he pulled out his BB gun."},{"id":"ph-embodied","type":"photos","title":"","items":[{"id":"5d2cd29f5f4fc1b05d02e2baa70ff8f1","url":"/_blob/5d2cd29f5f4fc1b05d02e2baa70ff8f1","caption":""},{"id":"15d744068d405833e1fc4d3be05be256","url":"/_blob/15d744068d405833e1fc4d3be05be256","caption":""},{"id":"e3b0082ce3bea55050baecc1e5347a0b","url":"/_blob/e3b0082ce3bea55050baecc1e5347a0b","caption":""}]},{"id":"dom-embodied","type":"text","heading":"Embodied","body":"Grandpa lived in his body. He loved to swim in the lake after dinner and ride his bike to the mailbox. He loved the years he spent skiing with the other firefighters and his many years tearing it up on the dance floor at weddings. He loved to boat and to snowmobile. He liked the way water was glassy smooth in the morning. He cooked a lot of fatty bacon. He tapped his knee to Dwayne Eddie’s guitar sound in Ghost Riders in the Sky. He loved or hated every food that he tried—the best thing he’d ever tasted or absolutely disgusting, too salty or too bland. Like a good Irishman, he indulged in whiskey. He loved a certain kind of sock, and each pair of shoes was the comfortable pair he had ever worn. Most of all, he loved dessert."},{"id":"ph-social","type":"photos","title":"","items":[{"id":"d03f9ac0fff768e5a96b58cd71ec1153","url":"/_blob/d03f9ac0fff768e5a96b58cd71ec1153","caption":""},{"id":"967d4a8b3f1cc368d49fda7cdae34b53","url":"/_blob/967d4a8b3f1cc368d49fda7cdae34b53","caption":""},{"id":"f0c4d771fa12d4aec1826ff4b3f36d84","url":"/_blob/f0c4d771fa12d4aec1826ff4b3f36d84","caption":""},{"id":"0a9d643ca1ef95c712399098e6a0ec0f","url":"/_blob/0a9d643ca1ef95c712399098e6a0ec0f","caption":""},{"id":"899377066013cd5327ed194af0611b17","url":"/_blob/899377066013cd5327ed194af0611b17","caption":""}]},{"id":"dom-social","type":"text","heading":"Social","body":"Grandpa gathered and connected with as many people as he could. There was nothing he liked more than to be with people, to share music, food, and a drink (or ten) with new friends, old acquaintances, and family. He and my Nana once invited their mailwoman over for lunch. It makes me happy to think of the mailwoman, in her blue shorts, eating a Reuben sandwich with Ed Donnelly. What did they talk about?"},{"id":"ph-interdependent","type":"photos","title":"","items":[{"id":"17553696d5e112e95a3798b88de319de","url":"/_blob/17553696d5e112e95a3798b88de319de","caption":""},{"id":"027149b04e7cc56aa35e71299d92eeeb","url":"/_blob/027149b04e7cc56aa35e71299d92eeeb","caption":""},{"id":"601fee7dcbd2bc57ad62338e4b5d3dc5","url":"/_blob/601fee7dcbd2bc57ad62338e4b5d3dc5","caption":""},{"id":"e5781230cc8fa667873e686ace9fc926","url":"/_blob/e5781230cc8fa667873e686ace9fc926","caption":""},{"id":"1c801e1206bac90d5011d859f9c5ed86","url":"/_blob/1c801e1206bac90d5011d859f9c5ed86","caption":""},{"id":"c5f34d535c5849e9d26fffcbd89c8ea8","url":"/_blob/c5f34d535c5849e9d26fffcbd89c8ea8","caption":""},{"id":"9ed8616295265a8b38eab307e6be4dfa","url":"/_blob/9ed8616295265a8b38eab307e6be4dfa","caption":""},{"id":"4911200d558d766e279de13c537de1b7","url":"/_blob/4911200d558d766e279de13c537de1b7","caption":""}]},{"id":"dom-interdependent","type":"text","heading":"Interdependent","body":"Grandpa was the most generous with his resources, his time, his care. For over 30 years, he was a firefighter in New York City. He ran into a burning building while off duty, saving five people. He was one of the first EMTs in NYC. He continued to share his service by driving—although after his retirement, he no longer needed to navigate the 50-foot fire trucks through the tight grid of Manhattan, but through the winding back roads of New Hampshire. He drove me to track practice, asking me if I would win for him. He drove my cousin Brady to school every day, picking up donuts and pointing out the prison on every ride. He drove to Maryland to help fix my second cousin's door. He drove to visit us in college, sometimes illegally parking on the main quads. He would travel down any road, for anyone."},{"id":"ph-emotional","type":"photos","title":"","items":[{"id":"58184205b5b1209b319129c27a74ee16","url":"/_blob/58184205b5b1209b319129c27a74ee16","caption":""},{"id":"2c11bbc0b5e85dccd1d6a3de6e6f3796","url":"/_blob/2c11bbc0b5e85dccd1d6a3de6e6f3796","caption":""},{"id":"28067cda84e0f67c4d960bfa6daf8814","url":"/_blob/28067cda84e0f67c4d960bfa6daf8814","caption":""},{"id":"104f9e8195e5473f609e79b0aaf6f34d","url":"/_blob/104f9e8195e5473f609e79b0aaf6f34d","caption":""},{"id":"3aa94f0afc9121034a9816b38931973d","url":"/_blob/3aa94f0afc9121034a9816b38931973d","caption":""}]},{"id":"dom-emotional","type":"text","heading":"Emotional","body":"Grandpa shared his stories and how he felt. He vaguely remembered the feeling of excitement when World War II ended, the confetti falling on the streets of Brooklyn. He remembered the joy of winning a dance competition at age 18 to “Rock Around the Clock” by Bill Haley and the Comets. He felt sadness and pride for his firefighter friends who saved lives and lost their own in the Twin Towers. He laughed at the time he accidentally fed hummingbird juice to my cousin Anthony, or when I killed the grass in the shape of my name because I liked how it turned bright green when I sprayed it with bug spray. He would smile and say “the best” when he looked at pictures of him holding me and my twin brother in his arms. These emotions colored his life, making something worth remembering."},{"id":"closing-text","type":"text","heading":"","body":"The only reason I know about these things is that he shared them. He lived them in front of our eyes or told us about them.\n\nIn these five ways, Grandpa’s life is a case study in what makes us distinct as humans. Computers and AI aren't creative, don't have empathy to care for others, don't form connections with anyone, don't live an embodied life, and don't feel or remember emotions. They are tools (and can be very helpful ones!). I was able to make this website and share these sentiments with you because of these technologies.\n\nI don’t expect baby girl to live a life without computers, without social media, without AI. But I hope, as his life ends and hers begins, that she continues to share the ways that made Grandpa’s life so beautiful. And in my wildest dreams, my niece drives a gold Honda Odyssey.\n\nThis project tries to remember and carry forward what Grandpa shared with us into the world my niece has just entered."}]},{"id":"gallery","title":"","kicker":"","wide":true,"suggest":["photos"],"blocks":[]}]},"creative":{"title":"Creative","summary":"A block of wood with 100 drilled holes for unbroken crayons.","lede":"","cover":null,"sections":[{"id":"cr-main","title":"","kicker":"","suggest":["video","photos","text"],"blocks":[]}],"shareTitle":"Sharing a Creative experience","shareImg":null,"shareCap":""},"embodied":{"title":"Embodied","summary":"The lake after dinner, fatty bacon, and dessert above all.","senseNav":true,"lede":"","cover":null,"sections":[{"id":"touch","title":"Touch","kicker":"Somatosensory","suggest":["photos"],"blocks":[]},{"id":"taste","title":"Taste","kicker":"Gustatory","suggest":["video","text"],"blocks":[]},{"id":"smell","title":"Smell","kicker":"Olfactory","suggest":["text","photos"],"blocks":[]},{"id":"sight","title":"Sight / Sound","kicker":"VISUAL / AUDITORY","suggest":["audio","photos","text"],"blocks":[]},{"id":"sound","title":"Sound","kicker":"Auditory","suggest":["audio","spotify","text"],"blocks":[]}],"shareTitle":"Sharing an Embodied experience","shareImg":null,"shareCap":""},"social":{"title":"Social","summary":"Music, food, and a Reuben sandwich with the mailman.","lede":"","cover":null,"sections":[{"id":"so-main","title":"","kicker":"","suggest":["photos","audio"],"blocks":[{"id":"0brawnop","type":"audio","items":[],"files":[],"title":"Figuring Out Table","caption":"","image":{"id":"f19878ee6ee26822bb26662c0af08b27","url":"/_blob/f19878ee6ee26822bb26662c0af08b27","name":"IMG_0974.jpeg"},"file":{"id":"a6a951ebbf891050b60ec9f544101e75","url":"/_blob/a6a951ebbf891050b60ec9f544101e75","name":"1. Figuring Out Table - 11:4:26, 2.04 PM.m4a"}},{"id":"geqetu81","type":"audio","items":[],"files":[],"title":"Getting Ready With Willa","caption":"","image":{"id":"8fe28ccd30b046a2671eec61e5a8b86d","url":"/_blob/8fe28ccd30b046a2671eec61e5a8b86d","name":"IMG_0977.jpeg"},"file":{"id":"edaeb79b49ff644b55446bc5134804db","url":"/_blob/edaeb79b49ff644b55446bc5134804db","name":"Getting Ready with Willa.m4a"}},{"id":"tz9h1lol","type":"audio","items":[],"files":[],"images":[{"id":"a2606156b3d276feb3f64e47f24d5d09","url":"/_blob/a2606156b3d276feb3f64e47f24d5d09","caption":"Floor Cake"},{"id":"eb4fe4e5bf17e2b1cbd20d9609dc56d9","url":"/_blob/eb4fe4e5bf17e2b1cbd20d9609dc56d9","caption":"The Table"},{"id":"4e75ac035ef9a28580d57684b40a0090","url":"/_blob/4e75ac035ef9a28580d57684b40a0090","caption":"Mim and Matt Looking Beautiful"}],"title":"Meeting Mim and Floor Cake","caption":"","file":{"id":"b5ed7887a25445732ed9b8457c67f593","url":"/_blob/b5ed7887a25445732ed9b8457c67f593","name":"Meeting Mim and Floor Cake Intro.m4a"}},{"id":"dlkioqwj","type":"audio","items":[],"files":[],"images":[{"id":"eb28140bf55d7547a0d513a918672cd2","url":"/_blob/eb28140bf55d7547a0d513a918672cd2","caption":"Karen and Alisa"},{"id":"c7a698d0ae007945fdc8a591b207e3ca","url":"/_blob/c7a698d0ae007945fdc8a591b207e3ca","caption":""}],"title":"Meeting Karen","caption":"","file":{"id":"1fc0324ef2e3b6cfd6f01671bb07c80d","url":"/_blob/1fc0324ef2e3b6cfd6f01671bb07c80d","name":"Welcome Karen.m4a"}},{"id":"pfdyp06v","type":"audio","items":[],"files":[],"images":[{"id":"853ece7a188011f230f0c5947885275f","url":"/_blob/853ece7a188011f230f0c5947885275f","caption":""}],"title":"Music Discussion","caption":"","file":{"id":"6ab0368a0b4e9a2d8fc9fb9432bdb90b","url":"/_blob/6ab0368a0b4e9a2d8fc9fb9432bdb90b","name":"Music List Discussion.m4a"}},{"id":"efx79rqy","type":"audio","items":[],"files":[],"images":[{"id":"deda7b256ee203ab6a63da5453152d56","url":"/_blob/deda7b256ee203ab6a63da5453152d56","caption":""},{"id":"41fd784d99ddd5673d4832ca8ebb3d6c","url":"/_blob/41fd784d99ddd5673d4832ca8ebb3d6c","caption":""},{"id":"57c89496d1ecc64099c608f6e473c0a4","url":"/_blob/57c89496d1ecc64099c608f6e473c0a4","caption":""}],"title":"Books and Ice Sculpture","caption":"","file":{"id":"eb8490b189d62d6d9098318061df1cd3","url":"/_blob/eb8490b189d62d6d9098318061df1cd3","name":"NEW books and ice scupture.m4a","dur":118.88}},{"id":"4n8p9a8i","type":"audio","items":[],"files":[],"images":[{"id":"f020f2220de836469275bee30ec7a077","url":"/_blob/f020f2220de836469275bee30ec7a077","caption":""},{"id":"cb52a0e43fe350bdc7b23db8342c8a55","url":"/_blob/cb52a0e43fe350bdc7b23db8342c8a55","caption":""},{"id":"bb611d7121e979cd775e8237e17eaeca","url":"/_blob/bb611d7121e979cd775e8237e17eaeca","caption":""},{"id":"b011decb35018305a16b1746f0bb7af2","url":"/_blob/b011decb35018305a16b1746f0bb7af2","caption":""},{"id":"c363c9c2ecedf60f9f138027bdf1ea81","url":"/_blob/c363c9c2ecedf60f9f138027bdf1ea81","caption":""},{"id":"f7be44256895b694a00f2ce54f3b4be4","url":"/_blob/f7be44256895b694a00f2ce54f3b4be4","caption":""},{"id":"884f01661004a0662da881fbaec9da4d","url":"/_blob/884f01661004a0662da881fbaec9da4d","caption":""},{"id":"0360517de788b721b334b6a3879fa1e6","url":"/_blob/0360517de788b721b334b6a3879fa1e6","caption":""},{"id":"b93431a1739095d06a81fd4996756f70","url":"/_blob/b93431a1739095d06a81fd4996756f70","caption":""}],"title":"Eating","caption":"","file":{"id":"6fdafbb72ea2de3723623285df9d4128","url":"/_blob/6fdafbb72ea2de3723623285df9d4128","name":"Dinner Convo.m4a"}},{"id":"5pnd9359","type":"audio","items":[],"files":[],"images":[{"id":"651a848c2978cf84fe0c22843c1add95","url":"/_blob/651a848c2978cf84fe0c22843c1add95","caption":"Tomer"},{"id":"8819e772bae1d5398d3def1953d32693","url":"/_blob/8819e772bae1d5398d3def1953d32693","caption":""},{"id":"633a839b7960031bf7c780099fb11a68","url":"/_blob/633a839b7960031bf7c780099fb11a68","caption":""},{"id":"8fdee9d4928004806b4d111e5a86dfe1","url":"/_blob/8fdee9d4928004806b4d111e5a86dfe1","caption":""},{"id":"bc27b2fcca95fd1f94015073a0c3ae4b","url":"/_blob/bc27b2fcca95fd1f94015073a0c3ae4b","caption":""},{"id":"e1e1d60c3181ec611a50badd74196375","url":"/_blob/e1e1d60c3181ec611a50badd74196375","caption":""},{"id":"5de6ef1bf92c614792cd92fbfd25482e","url":"/_blob/5de6ef1bf92c614792cd92fbfd25482e","caption":""},{"id":"6dd86750340c90ed2ed4f740522dae6c","url":"/_blob/6dd86750340c90ed2ed4f740522dae6c","caption":""},{"id":"d063c68d8f2bafeddbb1a7cbd2db7e86","url":"/_blob/d063c68d8f2bafeddbb1a7cbd2db7e86","caption":""},{"id":"adcd6ef8d3c826023d8865d3aa9147fa","url":"/_blob/adcd6ef8d3c826023d8865d3aa9147fa","caption":""},{"id":"34bbbc5d7288ef9e7d38b1b612094d90","url":"/_blob/34bbbc5d7288ef9e7d38b1b612094d90","caption":""},{"id":"af58710b56ea26c6c78ed44ae293db78","url":"/_blob/af58710b56ea26c6c78ed44ae293db78","caption":""},{"id":"aca6c1c3bfefc5e31c7936c08c2c3188","url":"/_blob/aca6c1c3bfefc5e31c7936c08c2c3188","caption":""},{"id":"0ffae53fb8b3a7a3f34bdea40a969384","url":"/_blob/0ffae53fb8b3a7a3f34bdea40a969384","caption":""},{"id":"d7ee6bab5b70028aa34f792efa6134f2","url":"/_blob/d7ee6bab5b70028aa34f792efa6134f2","caption":""},{"id":"3f6d03eab887dbed1c292dabcbe08e7f","url":"/_blob/3f6d03eab887dbed1c292dabcbe08e7f","caption":""}],"title":"Drawing Activity","caption":"","file":{"id":"cc934c473f766aa719e2392b62ea9e29","url":"/_blob/cc934c473f766aa719e2392b62ea9e29","name":"Drawing Activity .m4a"}},{"id":"8woer5kr","type":"audio","items":[],"files":[],"images":[{"id":"3fc9cd4de2357ee8a21401debd6ddc26","url":"/_blob/3fc9cd4de2357ee8a21401debd6ddc26","caption":""},{"id":"4ae947817c8acce625c961523c2d770b","url":"/_blob/4ae947817c8acce625c961523c2d770b","caption":""},{"id":"21eacad07969705bdd66fc51029d3ae9","url":"/_blob/21eacad07969705bdd66fc51029d3ae9","caption":""},{"id":"fea3c7f7afaf1bc502c33fd345dda5c5","url":"/_blob/fea3c7f7afaf1bc502c33fd345dda5c5","caption":""},{"id":"f66df5a2f0f8bc9976ce85e365973701","url":"/_blob/f66df5a2f0f8bc9976ce85e365973701","caption":""},{"id":"cb5cdaa551471b36efc4bd42b7ef9334","url":"/_blob/cb5cdaa551471b36efc4bd42b7ef9334","caption":""},{"id":"a685281b1aeb62ba3f14c0b6f4d21d87","url":"/_blob/a685281b1aeb62ba3f14c0b6f4d21d87","caption":""},{"id":"2c4311b8360fbe5ba1348946fb01590c","url":"/_blob/2c4311b8360fbe5ba1348946fb01590c","caption":""},{"id":"9982a0cb89038b32a6e8c633040cb368","url":"/_blob/9982a0cb89038b32a6e8c633040cb368","caption":""},{"id":"5274604b22e6bb6ce8ffcb0fb8bd7aaa","url":"/_blob/5274604b22e6bb6ce8ffcb0fb8bd7aaa","caption":""},{"id":"0bb964a67cd5ae0682dd336f37790ff0","url":"/_blob/0bb964a67cd5ae0682dd336f37790ff0","caption":""},{"id":"59f44f642038f36f2812f85afa9f9ac5","url":"/_blob/59f44f642038f36f2812f85afa9f9ac5","caption":""},{"id":"464b00b330b1f9b3201a83ea0a37b848","url":"/_blob/464b00b330b1f9b3201a83ea0a37b848","caption":""},{"id":"17079f898de19a9515f0a165b57812ec","url":"/_blob/17079f898de19a9515f0a165b57812ec","caption":""}],"title":"Post Drawing","caption":"","file":{"id":"b11af6a42a02dc1b9fa28952f8287116","url":"/_blob/b11af6a42a02dc1b9fa28952f8287116","name":"Post Drawing.m4a"}},{"id":"8cbk19xc","type":"audio","items":[],"files":[],"images":[{"id":"bd47c7d989f3c903558ecdfa0c934e48","url":"/_blob/bd47c7d989f3c903558ecdfa0c934e48","caption":""},{"id":"a1a8fb2f55880cde350c7eaabe35556f","url":"/_blob/a1a8fb2f55880cde350c7eaabe35556f","caption":""},{"id":"c084888b04ce3ab6f3a29140bcf4cf24","url":"/_blob/c084888b04ce3ab6f3a29140bcf4cf24","caption":""},{"id":"73fa8f61566ea7fc8688f2af6b7066d2","url":"/_blob/73fa8f61566ea7fc8688f2af6b7066d2","caption":""}],"title":"Floor Cake","caption":"","file":{"id":"1b617e80cc9087304e30068b5a0bc09b","url":"/_blob/1b617e80cc9087304e30068b5a0bc09b","name":"Floor Cake.m4a"}},{"id":"ycobeh7w","type":"audio","items":[],"files":[],"images":[{"id":"e08821edd41efef122886f2dc83bc958","url":"/_blob/e08821edd41efef122886f2dc83bc958","caption":""}],"title":"Karen's Life Lesson","caption":"","file":{"id":"964618ae8de6c1158898ea639a6da65f","url":"/_blob/964618ae8de6c1158898ea639a6da65f","name":"Karen's Wisdom.m4a"}},{"id":"qoefjp3z","type":"audio","items":[],"files":[],"images":[{"id":"d5ec31e60945a19c3e4743afd1a234b0","url":"/_blob/d5ec31e60945a19c3e4743afd1a234b0","caption":""}],"title":"Mim's Life Lesson","caption":"","file":{"id":"22c51a8450f10ebe07659781e0e642b4","url":"/_blob/22c51a8450f10ebe07659781e0e642b4","name":"Mim's Life Lesson.m4a"}},{"id":"kxje2sk2","type":"audio","items":[],"files":[],"images":[{"id":"638bbea4a30940add1744d908ffbb56b","url":"/_blob/638bbea4a30940add1744d908ffbb56b","caption":""}],"title":"Tomer's Life Lesson","caption":"","file":{"id":"94657d39d592424d3d6f7f5e51c3c9dd","url":"/_blob/94657d39d592424d3d6f7f5e51c3c9dd","name":"Tomer's Life Lesson.m4a"}},{"id":"kv4uibpq","type":"audio","items":[],"files":[],"images":[{"id":"35f0755699b83a0a07c83b8d63e79a9f","url":"/_blob/35f0755699b83a0a07c83b8d63e79a9f","caption":""}],"title":"Alisa's Life Lesson","caption":"","file":{"id":"7e8cbcbff831af6f487d5691dfcc5f27","url":"/_blob/7e8cbcbff831af6f487d5691dfcc5f27","name":"Alisa's Wisdom 2.m4a","dur":38.64}},{"id":"88jg34ft","type":"audio","items":[],"files":[],"images":[{"id":"04a433e2e3ae48dfad61093624cc6186","url":"/_blob/04a433e2e3ae48dfad61093624cc6186","caption":""}],"title":"Willa's Life Lesson","caption":"","file":{"id":"02fbf4c85f2dff3329bfaa94361ffb5c","url":"/_blob/02fbf4c85f2dff3329bfaa94361ffb5c","name":"Willa's Wisdom.m4a"}},{"id":"tfl5p3l3","type":"audio","items":[],"files":[],"images":[{"id":"594c4410a3f2cbe4fae674de4170a413","url":"/_blob/594c4410a3f2cbe4fae674de4170a413","caption":""}],"title":"Matt's Life Lesson","caption":"","file":{"id":"3aac7759b0f6af35d539a6626fe92dc8","url":"/_blob/3aac7759b0f6af35d539a6626fe92dc8","name":"Matt's Life Lesson.m4a"}},{"id":"0knrvjwr","type":"audio","items":[],"files":[],"images":[{"id":"3464ddc89528a5a36a6d6d750630690a","url":"/_blob/3464ddc89528a5a36a6d6d750630690a","caption":""}],"title":"Mina's Life Lesson","caption":"","file":{"id":"d1c2fc44dc47cc104227026176986468","url":"/_blob/d1c2fc44dc47cc104227026176986468","name":"Mina's Life Lesson.m4a"}},{"id":"a46xvdls","type":"audio","items":[],"files":[],"images":[{"id":"7567845b66c0e1cea679d168b7f8562c","url":"/_blob/7567845b66c0e1cea679d168b7f8562c","caption":""}],"title":"Jenny's Life Lesson (Twins)","caption":"","file":{"id":"877dab5380966460ed4f4d163ca0d1c7","url":"/_blob/877dab5380966460ed4f4d163ca0d1c7","name":"Jenny's Wisdom plus Twins.m4a"}},{"id":"1inrddlw","type":"audio","items":[],"files":[],"images":[{"id":"91ee5193586f87e6aa09dfc0cd03bd80","url":"/_blob/91ee5193586f87e6aa09dfc0cd03bd80","caption":""}],"title":"Birthday","caption":"","file":{"id":"a484a6e1ff4055d5177a1444dace2855","url":"/_blob/a484a6e1ff4055d5177a1444dace2855","name":"Birthdays.m4a"}},{"id":"9b7k25jx","type":"audio","items":[],"files":[],"images":[{"id":"73021f4ec6ba79290247876b942a93f9","url":"/_blob/73021f4ec6ba79290247876b942a93f9","caption":""},{"id":"450fea8c83901437bbd0e61eecacd1ea","url":"/_blob/450fea8c83901437bbd0e61eecacd1ea","caption":"The Strangers"},{"id":"bf67ec10e63ecb2d16ce1fcf67997e16","url":"/_blob/bf67ec10e63ecb2d16ce1fcf67997e16","caption":"Executive Producer Alisa"},{"id":"02b8c33707b5988730985c4770c678f6","url":"/_blob/02b8c33707b5988730985c4770c678f6","caption":""},{"id":"27c1c04f10bbd8c93c7842cae012f8af","url":"/_blob/27c1c04f10bbd8c93c7842cae012f8af","caption":"Everyone"}],"title":"Photo Time","caption":"","file":{"id":"88fcd7dd9ea7214d0ad1e1862c19774d","url":"/_blob/88fcd7dd9ea7214d0ad1e1862c19774d","name":"Photographs.m4a"}},{"id":"j3f542yd","type":"audio","items":[],"files":[],"images":[{"id":"dfe68831e0f2202e0a7573bcde151954","url":"/_blob/dfe68831e0f2202e0a7573bcde151954","caption":""},{"id":"f97148782093dc37d472cd28df6c49b8","url":"/_blob/f97148782093dc37d472cd28df6c49b8","caption":""},{"id":"dddd5e5787bf10832e5d37b336e39e97","url":"/_blob/dddd5e5787bf10832e5d37b336e39e97","caption":""},{"id":"36ad147d2a0836c19b0ce1fad5ea195c","url":"/_blob/36ad147d2a0836c19b0ce1fad5ea195c","caption":""},{"id":"fa2ad486d92c98c089875d1e79e5598a","url":"/_blob/fa2ad486d92c98c089875d1e79e5598a","caption":""},{"id":"0176d2c50f6af11c082ed0778840902c","url":"/_blob/0176d2c50f6af11c082ed0778840902c","caption":""}],"title":"The Crowd Leaves","caption":"","file":{"id":"7438736c10b022045845703a40ad875d","url":"/_blob/7438736c10b022045845703a40ad875d","name":"Goodbye.m4a"}},{"id":"1u8n4rpi","type":"audio","items":[],"files":[],"images":[{"id":"5f1f7b8982be84d275f68efc29e549bb","url":"/_blob/5f1f7b8982be84d275f68efc29e549bb","caption":""},{"id":"d9cbe50f4931fe2f7125e3912f27d0f6","url":"/_blob/d9cbe50f4931fe2f7125e3912f27d0f6","caption":""}],"title":"Matt and Willa","caption":"","file":{"id":"6eb8d82a7e9c12c8de4c5f9eab72532e","url":"/_blob/6eb8d82a7e9c12c8de4c5f9eab72532e","name":"Matt and Willa.m4a"}},{"id":"imx08u8s","type":"audio","items":[],"files":[],"images":[{"id":"4b5ba7312ba8c3eb44b88339988a0da3","url":"/_blob/4b5ba7312ba8c3eb44b88339988a0da3","caption":""},{"id":"42e1114c70896cadb99e9bb9f76c60f3","url":"/_blob/42e1114c70896cadb99e9bb9f76c60f3","caption":""},{"id":"f96a5d296a080ecf328d9f667d314723","url":"/_blob/f96a5d296a080ecf328d9f667d314723","caption":""}],"title":"Cleaning Up Ice Sculpture and Lights","caption":"","file":{"id":"fa13000d486782e536c5ba36ef999ed2","url":"/_blob/fa13000d486782e536c5ba36ef999ed2","name":"Ending.m4a"}}]}],"shareTitle":"Sharing a Social experience","shareImg":null,"shareCap":""},"interdependent":{"title":"Interdependent","summary":"Thirty years a New York City firefighter, and a driver for anyone who needed one.","lede":"","cover":null,"sections":[{"id":"in-main","title":"","kicker":"","suggest":["story","text"],"blocks":[]}],"shareTitle":"Sharing an Interdependent experience","shareImg":null,"shareCap":""},"emotional":{"title":"Emotional","summary":"Confetti in Brooklyn, a dance contest at 18, and “the best.”","lede":"","cover":null,"sections":[{"id":"em-main","title":"","kicker":"","suggest":["spotify","audio","text"],"blocks":[]}],"shareTitle":"Sharing an Emotional experience","shareImg":null,"shareCap":""},"sharing":{"title":"Sharing the Sharing Project","lede":"","cover":null,"sections":[{"id":"rs-main","title":"Research","kicker":"","suggest":["text","download"],"blocks":[]},{"id":"cu-main","title":"Curriculum","kicker":"","grid":true,"suggest":["lesson"],"blocks":[]}]}},"site":{"eyebrow":"A portfolio","domainsHeading":"Five ways to share...","epiLabel":"From the introduction","footer":"The Sharing Project · Learning Design, Innovation, and Technology"}}</script>
+<script id="sp-main">
+(function () {
+  "use strict";
+  const PAGES = [
+    { key: "home", nav: "Home" },
+    { key: "inspiration", nav: "Inspiration" },
+    { key: "creative", nav: "Creative", n: 1 },
+    { key: "embodied", nav: "Embodied", n: 2 },
+    { key: "social", nav: "Social", n: 3 },
+    { key: "interdependent", nav: "Interdependent", n: 4 },
+    { key: "emotional", nav: "Emotional", n: 5 },
+    { key: "sharing", nav: "Sharing the Sharing Project" }
+  ];
+  const DOMAINS = PAGES.filter(p => p.n);
+  const TYPES = {
+    text: "Text", quote: "Quote", photos: "Photos", story: "Photo + story",
+    video: "Video", audio: "Audio", spotify: "Spotify song", download: "Download", lesson: "Lesson"
+  };
+  const IMG_OK = ["image/png", "image/jpeg", "image/gif", "image/webp"];
+  const MAX = 20 * 1024 * 1024;
+
+  const saved = JSON.parse(document.getElementById("sp-data").textContent);
+  let state = clone(saved);
+  let route = "home", editing = false, dirty = false, menuOpen = false, pendingDraft = null, insertAfter = null;
+  let ns = { artifact: null, assets: null, downloads: null };
+  const app = document.getElementById("app");
+
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function uid() { return Math.random().toString(36).slice(2, 10); }
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c])); }
+  function paras(t) { return String(t || "").split(/\n\s*\n/).map(p => p.trim()).filter(Boolean).map(p => "<p>" + esc(p).replace(/\n/g, "<br>") + "</p>").join(""); }
+  function ss(k, v) { try { if (v === undefined) return JSON.parse(sessionStorage.getItem(k) || "null"); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
+  function safeUrl(u) { u = String(u || "").trim(); return /^https?:\/\//i.test(u) ? u : ""; }
+  const SITE_DEFAULTS = { eyebrow: "A portfolio", domainsHeading: "Five ways Grandpa shared", epiLabel: "From the introduction", footer: "The Sharing Project · Learning Design, Innovation, and Technology" };
+  function norm(s) { s.site = Object.assign({}, SITE_DEFAULTS, s.site || {}); return s; }
+  norm(state);
+
+  /* Editable text: plain output for visitors, click-to-type in edit mode. */
+  function P(pk, sid, bid, field) { return [pk, sid || "", bid || "", field].join("|"); }
+  function ed(path, val, tag, cls, opts) {
+    opts = opts || {};
+    if (!editing) return val ? "<" + tag + (cls ? ' class="' + cls + '"' : "") + ">" + (opts.multi ? paras(val) : esc(val)) + "</" + tag + ">" : "";
+    return "<" + tag + ' class="' + (cls || "") + (opts.multi ? " pre" : "") + '" contenteditable="plaintext-only" spellcheck="true" data-ed="' + esc(path) + '"' +
+      (opts.multi ? "" : ' data-single="1"') + ' data-ph="' + esc(opts.ph || "Type here") + '">' + esc(val || "") + "</" + tag + ">";
+  }
+  function setField(path, value) {
+    const p = path.split("|"), pk = p[0], sid = p[1], bid = p[2], f = p[3];
+    let o;
+    if (pk === "site") o = state.site;
+    else if (!sid) o = state.pages[pk];
+    else if (!bid) o = findSec(pk, sid);
+    else o = findBlk(pk, sid, bid);
+    if (o) o[f] = value;
+  }
+
+  /* ---------- rendering ---------- */
+  function navHtml() {
+    return PAGES.map((p, i) => (i === 2 || i === 7 ? '<span class="sep" aria-hidden="true"></span>' : "") +
+      '<a href="#' + p.key + '"' + (route === p.key ? ' aria-current="page"' : "") + ">" + esc(p.key === "home" ? "Home" : state.pages[p.key].title || p.nav) + "</a>").join("");
+  }
+
+  function printHtml(img, attrs, tilt) {
+    if (!img || !img.url) return "";
+    return '<button type="button" class="print ' + (tilt || "") + '" ' + attrs + ' aria-label="Open photo' + (img.caption ? ": " + esc(img.caption) : "") + '">' +
+      '<img src="' + esc(img.url) + '" alt="' + esc(img.caption || "") + '" loading="lazy">' +
+      '<span class="cap">' + esc(img.caption || "") + "</span></button>";
+  }
+
+  function blockHtml(pk, sec, b, idx, storyIdx) {
+    const ref = 'data-p="' + pk + '" data-s="' + sec.id + '" data-b="' + b.id + '"';
+    let h = "";
+    const E = (f, tag, cls, opts) => ed(P(pk, sec.id, b.id, f), b[f], tag, cls, opts);
+    switch (b.type) {
+      case "text":
+        if (!editing && !b.heading && !b.body) break;
+        h = '<div class="b-text' + (b.essay ? " essay" : "") + '">' + E("heading", "h3", "", { ph: "Heading (optional)" }) + E("body", "div", "", { multi: 1, ph: "Write here…" }) + "</div>";
+        break;
+      case "quote":
+        h = '<figure class="b-quote">' + E("text", "blockquote", "", { multi: 1, ph: "Quote" }) + E("by", "figcaption", "", { ph: "Who said it (optional)" }) + "</figure>";
+        break;
+      case "photos": {
+        const items = (b.items || []).filter(i => i.url);
+        if (!items.length) { h = editing ? '<button type="button" class="drop slim" data-act="blk-edit" ' + ref + ">+ Add photos</button>" : ""; break; }
+        const cls = items.length === 1 ? " one" : items.length === 2 ? " two" : "";
+        h = E("title", "h3", "media-title", { ph: "Title above the photos (optional)" }) + '<div class="b-photos' + cls + '">' +
+          items.map((it, i) => printHtml(it, 'data-act="lb" ' + ref + ' data-i="' + i + '"', i % 3 === 0 ? "tilt-a" : i % 3 === 2 ? "tilt-b" : "")).join("") + "</div>";
+        break;
+      }
+      case "story":
+        h = '<div class="b-story' + (storyIdx % 2 ? " flip" : "") + '"><div class="s-img">' +
+          (b.image && b.image.url ? printHtml({ url: b.image.url, caption: b.caption }, 'data-act="lb" ' + ref + ' data-i="0"', storyIdx % 2 ? "tilt-b" : "tilt-a") : (editing ? '<div class="cover-empty">No photo yet</div>' : "")) +
+          '</div><div class="s-txt">' + E("heading", "h3", "", { ph: "Heading" }) + E("body", "div", "", { multi: 1, ph: "Tell the story…" }) + "</div></div>";
+        break;
+      case "video": {
+        const link = safeUrl(b.link);
+        h = '<div class="b-video">' + E("title", "h3", "media-title", { ph: "Title (optional)" });
+        if (b.file && b.file.url) h += '<video controls playsinline preload="metadata" src="' + esc(b.file.url) + '"></video>';
+        else if (link) h += '<div class="card"><div class="disc" aria-hidden="true"></div><div class="grow"><h3>' + esc(b.title || "Watch the video") + '</h3><div class="sub">Opens in a new tab</div></div><a class="btn" href="' + esc(link) + '" target="_blank" rel="noopener">Watch ↗</a></div>';
+        else if (editing) h += '<p class="empty-note">No video yet. Choose Edit to add one.</p>';
+        h += E("caption", "div", "media-cap", { multi: 1, ph: "Caption (optional)" }) + "</div>";
+        break;
+      }
+      case "audio": {
+        const imgs = audioImgs(b);
+        h = '<div class="b-aud">' + (imgs.length ? '<div class="jgrid' + (imgs.length === 1 ? " one" : "") + '">' + imgs.map((it, i) => printHtml(it, 'data-act="lb" ' + ref + ' data-i="' + i + '"' + (it.r ? ' style="--r:' + (+it.r).toFixed(3) + '"' : ""), "")).join("") + "</div>"
+            : (editing ? '<button type="button" class="drop slim" data-act="blk-edit" ' + ref + ">+ Add photos</button>" : "")) +
+          '<div class="card aud-bar"><div class="disc" aria-hidden="true"></div><div class="grow">' + (editing || b.title ? E("title", "h3", "", { ph: "Title" }) : "<h3>Recording</h3>") +
+          E("caption", "div", "note", { multi: 1, ph: "What we're hearing (optional)" }) +
+          (b.file && b.file.url ? '<div class="player" data-dur="' + (+b.file.dur || 0) + '"><button type="button" class="pp" aria-label="Play">&#9654;</button>' +
+              '<input type="range" min="0" max="1000" step="1" value="0" aria-label="Position in recording">' +
+              '<span class="t">0:00 / ' + (b.file.dur ? clock(b.file.dur) : "–:––") + '</span><audio preload="metadata" src="' + esc(b.file.url) + '"></audio></div>'
+            : (editing ? '<button type="button" class="btn small" data-act="blk-edit" ' + ref + ' style="margin-top:.75rem">+ Add audio</button>' : "")) + "</div></div></div>";
+        break;
+      }
+      case "spotify": {
+        const link = safeUrl(b.link);
+        h = '<div class="card"><div class="disc" aria-hidden="true"></div><div class="grow">' + E("title", "h3", "", { ph: "Song" }) +
+          E("artist", "div", "sub", { ph: "Artist" }) + E("note", "div", "note", { multi: 1, ph: "Why this song (optional)" }) + "</div>" +
+          (link ? '<a class="btn" href="' + esc(link) + '" target="_blank" rel="noopener">Listen on Spotify ↗</a>' : "") + "</div>";
+        break;
+      }
+      case "download":
+        h = '<div class="card"><div class="doc-ico" aria-hidden="true">' + esc(extOf(b.file && b.file.name) || "link") + '</div><div class="grow">' + (editing || b.title ? E("title", "h3", "", { ph: "Title" }) : "<h3>" + esc((b.file && b.file.name) || "Download") + "</h3>") +
+          E("desc", "div", "note", { multi: 1, ph: "Description (optional)" }) + "</div>" + fileBtn(b.file, b.link, "") + "</div>";
+        break;
+      case "lesson":
+        h = '<div class="card lesson">' + (editing || b.title ? E("title", "h3", "", { ph: "Lesson title" }) : "<h3>Untitled lesson</h3>") + '<div class="pills">' +
+          [b.grade, b.duration, b.domain].filter(Boolean).map(x => '<span class="pill">' + esc(x) + "</span>").join("") + "</div>" +
+          E("objective", "div", "note", { multi: 1, ph: "Objective" }) + '<div class="files">' +
+          (b.files || []).map(f => fileBtn(f, "", "small")).join("") + (safeUrl(b.link) ? fileBtn(null, b.link, "small") : "") + "</div></div>";
+        break;
+    }
+    if (!editing) return h ? '<div class="blk">' + h + "</div>" : "";
+    const open = insertAfter && insertAfter.s === sec.id && insertAfter.b === b.id;
+    return '<div class="blk"><div class="ed-tools ed-bar">' +
+      '<button type="button" data-act="blk-edit" ' + ref + ">Edit " + esc(TYPES[b.type].toLowerCase()) + "</button>" +
+      '<button type="button" data-act="blk-below" ' + ref + ">" + (open ? "Cancel adding" : "+ Add below") + "</button>" +
+      '<button type="button" data-act="blk-up" ' + ref + ' aria-label="Move up">↑</button>' +
+      '<button type="button" data-act="blk-down" ' + ref + ' aria-label="Move down">↓</button>' +
+      '<button type="button" data-act="blk-del" ' + ref + ">Delete</button></div>" + h + "</div>" +
+      (open ? addBarHtml(pk, sec, b.id) : "");
+  }
+
+  /* audio items once held a single `image`; they now hold a list of `images` */
+  function audioImgs(b) { return (b.images && b.images.length ? b.images : b.image && b.image.url ? [b.image] : []).filter(x => x.url); }
+  function extOf(name) { const m = /\.([a-z0-9]{1,5})$/i.exec(name || ""); return m ? m[1].toLowerCase() : ""; }
+  function fileBtn(f, link, size) {
+    if (f && f.url) return '<a class="btn ' + size + '" href="' + esc(f.url) + '" target="_blank" rel="noopener" data-act="dl" data-url="' + esc(f.url) + '" data-name="' + esc(f.name || "file") + '">Download' + (size ? " " + esc(extOf(f.name).toUpperCase()) : "") + "</a>";
+    const u = safeUrl(link);
+    return u ? '<a class="btn ' + (size ? size + " ghost" : "ghost") + '" href="' + esc(u) + '" target="_blank" rel="noopener">Open link ↗</a>' : "";
+  }
+
+  function addBarHtml(pk, sec, after) {
+    const sug = sec.suggest || [];
+    const rest = Object.keys(TYPES).filter(t => sug.indexOf(t) < 0);
+    const btn = (t, cls) => '<button type="button"' + cls + ' data-act="add" data-p="' + pk + '" data-s="' + sec.id + '" data-t="' + t + '"' + (after ? ' data-after="' + after + '"' : "") + ">+ " + TYPES[t] + "</button>";
+    return '<div class="ed-tools ed-add"><span class="lbl">' + (after ? "Add here:" : "Add to " + esc(sec.title || "this page") + ":") + "</span>" +
+      sug.map(t => btn(t, ' class="sug"')).join("") + rest.map(t => btn(t, "")).join("") + "</div>";
+  }
+
+  function sectionHtml(pk, sec, si, count) {
+    const visible = sec.blocks.some(b => blockHtml(pk, sec, b, 0, 0) !== "");
+    if (!editing && !visible && !(state.pages[pk].senseNav)) return "";
+    let storyIdx = 0;
+    const blocks = sec.blocks.map((b, i) => blockHtml(pk, sec, b, i, b.type === "story" ? storyIdx++ : 0)).join("");
+    const ref = 'data-p="' + pk + '" data-s="' + sec.id + '"';
+    let h = '<section class="section' + (sec.wide || sec.grid ? " wide" : "") + '">';
+    if (sec.title || sec.kicker || editing) {
+      h += '<div class="sec-head" id="sec-' + esc(sec.id) + '">' + ed(P(pk, sec.id, "", "title"), sec.title, "h2", "", { ph: "Section title (optional)" }) +
+        ed(P(pk, sec.id, "", "kicker"), sec.kicker, "div", "kicker", { ph: "Small label (optional)" }) +
+        '<div class="ed-tools ed-bar sec-tools"><button type="button" data-act="sec-edit" ' + ref + ">" + (sec.title ? "Rename section" : "Add section title") + "</button>" +
+        (si > 0 ? '<button type="button" data-act="sec-up" ' + ref + ' aria-label="Move section up">↑</button>' : "") +
+        (si < count - 1 ? '<button type="button" data-act="sec-down" ' + ref + ' aria-label="Move section down">↓</button>' : "") +
+        '<button type="button" data-act="sec-del" ' + ref + ">Delete section</button></div></div>";
+    }
+    if (!sec.blocks.length && !editing) h += '<p class="empty-note">More is being added here soon.</p>';
+    h += '<div class="' + (sec.grid ? "lesson-grid" : "blocks") + '">' + blocks + "</div>" + addBarHtml(pk, sec) + "</section>";
+    return h;
+  }
+
+  function coverHtml(pg, pk) {
+    if (pg.cover && pg.cover.url) return printHtml(pg.cover, 'data-act="lb-cover" data-p="' + pk + '"', "tilt-b");
+    return editing ? '<div class="cover-empty">Add a cover photo with “Edit page header”.</div>' : "";
+  }
+
+  function pageHtml() {
+    const pk = route, pg = state.pages[pk], meta = PAGES.find(p => p.key === pk);
+    const headTools = '<div class="ed-tools ed-bar page-tools"><button type="button" data-act="page-edit" data-p="' + pk + '">Edit page header</button></div>';
+    let h = "";
+    if (pk === "home") {
+      h += '<div class="wrap"><div class="hero"' + (pg.cover && pg.cover.url || editing ? "" : ' style="grid-template-columns:1fr"') + '><div>' +
+        ed(P("site", "", "", "eyebrow"), state.site.eyebrow, "div", "eyebrow", { ph: "Small label" }) + ed(P(pk, "", "", "title"), pg.title, "h1", "", { ph: "Site title" }) +
+        ed(P(pk, "", "", "lede"), pg.lede, "p", "lede", { ph: "One line about the project" }) +
+        ed(P(pk, "", "", "by"), pg.by, "p", "by", { ph: "Byline, e.g. your name (optional)" }) + headTools + "</div><div>" + coverHtml(pg, pk) + "</div></div></div>";
+    } else {
+      h += '<div class="wrap"><header class="page-head">' + (meta.n ? '<div class="eyebrow">Domain ' + meta.n + " of 5</div>" : "") + ed(P(pk, "", "", "title"), pg.title, "h1", "", { ph: "Page title" }) +
+        (meta.n ? ed(P(pk, "", "", "lede"), pg.lede, "div", "epi", { multi: 1, ph: "Text for this page (optional)" }) + (pg.lede ? ed(P("site", "", "", "epiLabel"), state.site.epiLabel, "div", "epi-label", { ph: "Label" }) : "")
+          : (pg.lede || editing ? '<div style="font-size:1.15rem">' + ed(P(pk, "", "", "lede"), pg.lede, "div", "epi", { multi: 1, ph: "Introduction for this page (optional)" }) + "</div>" : "")) +
+        headTools + (pg.cover && pg.cover.url || editing && pk !== "sharing" ? '<div class="cover">' + coverHtml(pg, pk) + "</div>" : "") + "</header></div>";
+    }
+    if (pg.senseNav) {
+      h += '<nav class="senses" aria-label="Senses"><div class="wrap"><div class="row">' + pg.sections.map(s => '<button type="button" data-act="jump" data-s="' + s.id + '">' + esc(s.title) + (s.kicker ? "<small>" + esc(s.kicker) + "</small>" : "") + "</button>").join("") + "</div></div></nav>";
+    }
+    h += '<div class="wrap">';
+    pg.sections.forEach((s, i) => {
+      h += sectionHtml(pk, s, i, pg.sections.length);
+      if (pk === "home" && s.id === "welcome") h += domainsHtml();
+    });
+    h += '<div class="ed-tools ed-add add-sec"><button type="button" class="sug" data-act="sec-add" data-p="' + pk + '">+ Add a section to this page</button></div>';
+    /* reading order: Introduction → five domains → Sharing the Sharing Project */
+    const seq = PAGES.slice(1), at = seq.findIndex(p => p.key === pk);
+    if (at >= 0) {
+      const prev = seq[at - 1], next = seq[at + 1];
+      const lbl = (p, dir) => (p.n ? dir + " domain" : dir);
+      h += '<nav class="pager" aria-label="Pages">' + (prev ? '<a href="#' + prev.key + '"><small>← ' + lbl(prev, "Previous") + "</small><span>" + esc(state.pages[prev.key].title) + "</span></a>" : "") +
+        (next ? '<a class="next" href="#' + next.key + '"><small>' + lbl(next, "Next") + " →</small><span>" + esc(state.pages[next.key].title) + "</span></a>" : "") + "</nav>";
+    }
+    return h + "</div>";
+  }
+
+  /* home: each domain, with a "Sharing a … experience" photo beside it */
+  function domainsHtml() {
+    return '<section class="domains">' + ed(P("site", "", "", "domainsHeading"), state.site.domainsHeading, "h2", "", { ph: "Heading" }) + '<div class="dlist">' + DOMAINS.map(d => {
+      const p = state.pages[d.key], img = p.shareImg && p.shareImg.url ? p.shareImg : null;
+      let photo = "";
+      if (img || editing) {
+        photo = '<div class="d-photo">' + ed(P(d.key, "", "", "shareTitle"), p.shareTitle, "div", "share-h", { ph: "Photo heading" }) +
+          (img ? printHtml({ url: img.url, caption: "" }, 'data-act="lb-share" data-p="' + d.key + '"', d.n % 2 ? "tilt-a" : "tilt-b")
+            : '<button type="button" class="drop" data-act="share-up" data-p="' + d.key + '">+ Add a photo</button>') +
+          ed(P(d.key, "", "", "shareCap"), p.shareCap, "div", "share-cap", { ph: "Caption (optional)" }) +
+          (img ? '<div class="ed-tools ed-bar"><button type="button" data-act="share-up" data-p="' + d.key + '">Replace photo</button><button type="button" data-act="share-rm" data-p="' + d.key + '">Remove photo</button></div>' : "") + "</div>";
+      }
+      return '<div class="drow' + (photo ? "" : " solo") + '" style="--dc:var(--c-' + d.key + ')"><div class="d-txt"><span class="n">' + d.n + " OF 5</span><h3>" + esc(p.title) + "</h3>" +
+        '<a class="btn ghost" href="#' + d.key + '">Explore ' + esc(p.title) + " →</a></div>" + photo + "</div>";
+    }).join("") + "</div></section>";
+  }
+
+  const shareInput = document.createElement("input");
+  shareInput.type = "file"; shareInput.accept = "image/*"; shareInput.hidden = true; shareInput.id = "share-file";
+  document.body.appendChild(shareInput);
+  let shareKey = null;
+  shareInput.addEventListener("change", async () => {
+    const f = shareInput.files && shareInput.files[0], k = shareKey;
+    shareInput.value = "";
+    if (!f || !k) return;
+    toast("Uploading photo…");
+    try {
+      const a = await upload(f, "image");
+      state.pages[k].shareImg = { id: a.id, url: a.url, name: a.name };
+      changed();
+      toast("Photo added. Choose Save changes to keep it.");
+    } catch (err) { toast(err.message); }
+  });
+
+  function render() {
+    document.documentElement.classList.toggle("editing", editing);
+    document.body.classList.toggle("editing", editing);
+    const canEdit = !!(ns.assets && ns.artifact);
+    let h = "";
+    if (pendingDraft && canEdit) h += '<div class="banner"><div class="wrap"><span>You have edits that were not saved last time.</span><button type="button" class="btn small" data-act="draft-restore">Restore them</button><button type="button" class="btn small ghost" data-act="draft-drop">Discard</button></div></div>';
+    h += '<header class="top"><div class="wrap"><a class="brand" href="#home">' + esc(state.pages.home.title || "The Sharing Project") + "</a>" +
+      '<button type="button" class="menu-btn" data-act="menu" aria-expanded="' + menuOpen + '" aria-controls="nav">☰ Menu</button>' +
+      '<nav id="nav" class="nav' + (menuOpen ? " open" : "") + '" aria-label="Pages">' + navHtml() + "</nav>" +
+      (canEdit ? '<button type="button" class="edit-btn" data-act="edit-toggle" aria-pressed="' + editing + '">' + (editing ? "Editing" : "Edit site") + "</button>" : "") + "</div></header>";
+    h += "<main>" + pageHtml() + "</main>";
+    h += '<footer><div class="wrap">' + ed(P("site", "", "", "footer"), state.site.footer, "div", "", { ph: "Footer text" }) + "</div></footer>";
+    h += '<div id="savebar-host"></div>';
+    app.innerHTML = h;
+    renderSavebar();
+  }
+
+  function renderSavebar() {
+    const host = document.getElementById("savebar-host");
+    if (!host) return;
+    host.innerHTML = !editing ? "" : '<div class="savebar"><div class="wrap"><span class="msg" id="savemsg">' + (dirty ? "You have unsaved changes." : "Click any text to change it, or use the buttons to add and arrange media.") + "</span>" +
+      (dirty ? '<button type="button" class="btn ghost" data-act="discard">Discard changes</button>' : "") +
+      '<button type="button" class="btn" data-act="save"' + (dirty ? "" : " disabled") + ">Save changes</button>" +
+      '<button type="button" class="btn ghost" data-act="edit-toggle">Done</button></div></div>';
+  }
+
+  /* ---------- audio player ----------
+     Recordings prepared in the browser carry no length in the file, so the native bar
+     can't place the time. This bar uses the length saved at upload, or works it out. */
+  function playerOf(el) { return el && el.closest && el.closest(".player"); }
+  function plDur(pl) {
+    const a = pl.querySelector("audio"), d = a.duration;
+    if (isFinite(d) && d > 0) return d;
+    return +pl.dataset.dur || 0;
+  }
+  function plDraw(pl) {
+    const a = pl.querySelector("audio"), d = plDur(pl), r = pl.querySelector("input"), t = pl.querySelector(".t"), b = pl.querySelector(".pp");
+    const cur = pl._probe ? 0 : (a.currentTime || 0);
+    if (!pl._drag) r.value = d ? Math.round(Math.min(cur / d, 1) * 1000) : 0;
+    t.textContent = clock(cur) + " / " + (d ? clock(d) : "–:––");
+    b.innerHTML = a.paused ? "&#9654;" : "&#10074;&#10074;";
+    b.setAttribute("aria-label", a.paused ? "Play" : "Pause");
+  }
+  /* Learn the real length by asking the browser to jump to the end once, then come back.
+     Done only when someone plays or moves the bar, so pages with many recordings stay light. */
+  function plProbe(pl, then) {
+    const a = pl.querySelector("audio");
+    if (plDur(pl) || pl._probe) { if (!pl._probe) then(); else pl._then = then; return; }
+    pl._probe = true; pl._then = then;
+    pl.querySelector(".t").textContent = "Loading…";
+    const go = () => { try { a.currentTime = 1e7; } catch (_) { pl._probe = false; then(); } };
+    if (a.readyState >= 1) go(); else a.addEventListener("loadedmetadata", go, { once: true });
+  }
+  ["loadedmetadata", "durationchange", "timeupdate", "play", "pause", "ended", "seeked"].forEach(ev => app.addEventListener(ev, e => {
+    const a = e.target; if (!a || a.tagName !== "AUDIO") return;
+    const pl = playerOf(a); if (!pl) return;
+    if (pl._probe && isFinite(a.duration) && a.duration > 0) {
+      pl._probe = false;
+      try { a.currentTime = 0; } catch (_) {}
+      const f = pl._then; pl._then = null; if (f) f();
+    }
+    if (ev === "play") app.querySelectorAll(".player audio").forEach(o => { if (o !== a && !o.paused) o.pause(); });
+    if (ev === "ended") { try { a.currentTime = 0; } catch (_) {} }
+    plDraw(pl);
+  }, true));
+  app.addEventListener("input", e => {
+    const pl = playerOf(e.target); if (!pl || e.target.type !== "range") return;
+    pl._drag = true;
+    const d = plDur(pl), t = pl.querySelector(".t");
+    if (d) t.textContent = clock(e.target.value / 1000 * d) + " / " + clock(d);
+  });
+  app.addEventListener("change", e => {
+    const pl = playerOf(e.target); if (!pl || e.target.type !== "range") return;
+    const frac = e.target.value / 1000;
+    plProbe(pl, () => {
+      pl._drag = false;
+      const a = pl.querySelector("audio"), d = plDur(pl);
+      if (d) { try { a.currentTime = frac * d; } catch (_) {} }
+      plDraw(pl);
+    });
+  });
+  app.addEventListener("click", e => {
+    const b = e.target.closest && e.target.closest(".player .pp"); if (!b) return;
+    e.stopPropagation();
+    const pl = playerOf(b), a = pl.querySelector("audio");
+    if (!a.paused) { a.pause(); return; }
+    if (plDur(pl)) { a.play().catch(() => {}); return; }
+    /* start (silently) inside the tap so the browser allows sound, then find the length */
+    a.muted = true; a.play().catch(() => {});
+    plProbe(pl, () => { a.muted = false; a.play().catch(() => {}); });
+  }, true);
+  /* lay audio photos out by their real shape so rows pack tightly */
+  app.addEventListener("load", e => {
+    const im = e.target; if (!im || im.tagName !== "IMG" || !im.naturalWidth) return;
+    const pr = im.parentElement; if (!pr || !pr.parentElement || !pr.parentElement.classList.contains("jgrid")) return;
+    pr.style.setProperty("--r", (im.naturalWidth / im.naturalHeight).toFixed(3));
+  }, true);
+
+  /* typing into editable text updates state without re-rendering, so the cursor stays put */
+  let draftT;
+  function nodeEl(t) { return t && (t.nodeType === 1 ? t : t.parentElement); }
+  app.addEventListener("input", e => {
+    const el = nodeEl(e.target) && nodeEl(e.target).closest("[data-ed]");
+    if (!el) return;
+    setField(el.dataset.ed, el.innerText.replace(/\n+$/, ""));
+    state.rev = uid();
+    const wasDirty = dirty; dirty = true;
+    clearTimeout(draftT); draftT = setTimeout(() => ss("sp-draft", { rev: state.rev, state: state }), 400);
+    if (!wasDirty) renderSavebar();
+  });
+  app.addEventListener("keydown", e => {
+    const el = nodeEl(e.target) && nodeEl(e.target).closest("[data-single]");
+    if (el && e.key === "Enter") { e.preventDefault(); el.blur(); }
+  });
+  app.addEventListener("paste", e => {
+    const el = nodeEl(e.target) && nodeEl(e.target).closest("[data-ed]");
+    if (!el || !e.clipboardData) return;
+    e.preventDefault();
+    let t = e.clipboardData.getData("text/plain");
+    if (el.dataset.single) t = t.replace(/\s*\n\s*/g, " ");
+    document.execCommand("insertText", false, t);
+  });
+  app.addEventListener("focusout", e => {
+    const el = nodeEl(e.target) && nodeEl(e.target).closest("[data-ed]");
+    if (el && /\|title$/.test(el.dataset.ed)) {
+      const nav = document.getElementById("nav");
+      if (nav) nav.innerHTML = navHtml();
+      const brand = document.querySelector(".brand");
+      if (brand) brand.textContent = state.pages.home.title || "The Sharing Project";
+    }
+  });
+
+  /* ---------- state helpers ---------- */
+  function findSec(pk, sid) { return state.pages[pk].sections.find(s => s.id === sid); }
+  function findBlk(pk, sid, bid) { const s = findSec(pk, sid); return s && s.blocks.find(b => b.id === bid); }
+  function changed() {
+    state.rev = uid(); dirty = true;
+    ss("sp-draft", { rev: state.rev, state: state });
+    render();
+  }
+  function move(arr, i, d) { const j = i + d; if (j < 0 || j >= arr.length) return; const t = arr[i]; arr[i] = arr[j]; arr[j] = t; }
+
+  let toastT;
+  function toast(msg) {
+    let t = document.querySelector(".toast");
+    if (!t) { t = document.createElement("div"); t.className = "toast"; t.setAttribute("role", "status"); document.body.appendChild(t); }
+    t.textContent = msg; clearTimeout(toastT); toastT = setTimeout(() => t.remove(), 4200);
+  }
+
+  /* ---------- saving ---------- */
+  function buildDoc(s) {
+    const resetEl = document.head.querySelector("style");
+    const json = JSON.stringify(s).replace(/</g, "\\u003c");
+    const fonts = document.querySelector('link[href*="fonts.googleapis"]');
+    return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>' + (resetEl ? resetEl.textContent : "") + "</style></head><body>" +
+      "<title>The Sharing Project</title>\n" + '<meta name="claude:viewport-fit-sides" content="cover">\n' +
+      (fonts ? fonts.outerHTML + "\n" : "") +
+      '<style id="sp-style">' + document.getElementById("sp-style").textContent + "</style>\n" +
+      '<div id="app"></div>\n<script id="sp-data" type="application/json">' + json + "<\/script>\n" +
+      '<script id="sp-main">' + document.getElementById("sp-main").textContent + "<\/script></body></html>";
+  }
+
+  async function save() {
+    if (!ns.artifact) return;
+    const msg = document.getElementById("savemsg");
+    state.rev = uid();
+    ss("sp-draft", { rev: state.rev, state: state });
+    ss("sp-ui", { route: route, editing: true });
+    if (msg) msg.textContent = "Saving…";
+    try {
+      await ns.artifact.publish(buildDoc(state));
+      if (msg) msg.textContent = "Saved. Reloading the page…";
+    } catch (e) {
+      const c = e && e.code;
+      if (c === "conflict") { if (msg) msg.textContent = "A newer version was saved elsewhere. Reloading; your edits can be restored."; return; }
+      if (c === "not_writer" || c === "not_granted" || c === "capability_disabled" || c === "not_declared") { if (msg) msg.textContent = "Saving isn't available in this view. Open the site from your own claude.ai account to save."; return; }
+      if (c === "too_large") { if (msg) msg.textContent = "The page is too large to save. Remove some long text and try again."; return; }
+      if (c === "rate_limited") { if (msg) msg.textContent = "Saving too often. Wait a minute, then choose Save changes again."; return; }
+      if (msg) msg.textContent = "Couldn't save just now. Your edits are kept here; try Save changes again.";
+    }
+  }
+
+  /* ---------- uploads ---------- */
+  async function prepImage(file) {
+    const needsConvert = IMG_OK.indexOf(file.type) < 0;
+    if (file.type === "image/gif" && file.size <= MAX) return { blob: file, type: "image/gif" };
+    let bmp;
+    try { bmp = await createImageBitmap(file); } catch (e) {
+      if (!needsConvert && file.size <= MAX) return { blob: file, type: file.type };
+      throw new Error("This photo format can't be read here. Save it as a JPEG or PNG and try again.");
+    }
+    const big = Math.max(bmp.width, bmp.height);
+    if (!needsConvert && big <= 2400 && file.size <= 6 * 1024 * 1024) return { blob: file, type: file.type };
+    const scale = Math.min(1, 2400 / big);
+    const c = document.createElement("canvas");
+    c.width = Math.round(bmp.width * scale); c.height = Math.round(bmp.height * scale);
+    c.getContext("2d").drawImage(bmp, 0, 0, c.width, c.height);
+    const blob = await new Promise(r => c.toBlob(r, "image/jpeg", 0.86));
+    return { blob: blob, type: "image/jpeg" };
+  }
+
+  function mediaType(file, kind) {
+    const ext = extOf(file.name), t = file.type;
+    if (kind === "video") {
+      if (t === "video/mp4" || ext === "mp4" || ext === "m4v" || ext === "mov" || t === "video/quicktime") return "video/mp4";
+      if (t === "video/webm" || ext === "webm") return "video/webm";
+      throw new Error("Use an MP4 or WebM video. For other formats, upload to YouTube or Vimeo and paste the link instead.");
+    }
+    if (kind === "audio") {
+      if (t === "video/mp4" || ext === "mp4" || ext === "m4v") return "video/mp4";
+      if (t === "video/webm" || ext === "webm") return "video/webm";
+      return "convert";
+    }
+    if (kind === "doc") {
+      if (t === "application/pdf" || ext === "pdf") return "application/pdf";
+      if (ext === "txt") return "text/plain";
+      if (ext === "md") return "text/markdown";
+      if (ext === "csv") return "text/csv";
+      throw new Error("Save Word or PowerPoint files as PDF first (File › Save As › PDF), or paste a Google Drive link instead.");
+    }
+    return t;
+  }
+
+  /* The store takes no audio-only files, so audio is re-recorded into a video file
+     (one tiny blank frame track plus the sound). This runs in real time. */
+  async function audioToVideo(file, onProgress) {
+    const mime = ["video/webm;codecs=vp8,opus", "video/webm", "video/mp4;codecs=avc1,mp4a.40.2", "video/mp4"]
+      .find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m));
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!mime || !AC) throw new Error("This browser can't prepare audio. Try Chrome or Safari.");
+    const ctx = new AC();
+    let buf;
+    try { buf = await ctx.decodeAudioData(await file.arrayBuffer()); }
+    catch (e) { ctx.close(); throw new Error("This audio file can't be read. Try an M4A, MP3 or WAV file."); }
+    if (buf.duration > 25 * 60) { ctx.close(); throw new Error("This recording is over 25 minutes. Trim it and try again."); }
+    await ctx.resume();
+    const dest = ctx.createMediaStreamDestination();
+    const src = ctx.createBufferSource();
+    src.buffer = buf; src.connect(dest);
+    const c = document.createElement("canvas");
+    c.width = 16; c.height = 16;
+    const g = c.getContext("2d");
+    g.fillStyle = "#000"; g.fillRect(0, 0, 16, 16);
+    const vs = c.captureStream(2);
+    const rec = new MediaRecorder(new MediaStream([...vs.getVideoTracks(), ...dest.stream.getAudioTracks()]),
+      { mimeType: mime, audioBitsPerSecond: 96000, videoBitsPerSecond: 16000 });
+    const chunks = [];
+    rec.ondataavailable = e => { if (e.data && e.data.size) chunks.push(e.data); };
+    const stopped = new Promise(r => { rec.onstop = r; });
+    const ended = new Promise(r => { src.onended = r; });
+    rec.start(1000);
+    const t0 = ctx.currentTime;
+    src.start();
+    const tick = setInterval(() => { g.fillRect(0, 0, 16, 16); onProgress && onProgress(Math.min(ctx.currentTime - t0, buf.duration), buf.duration); }, 500);
+    await ended;
+    clearInterval(tick);
+    rec.stop();
+    await stopped;
+    vs.getTracks().forEach(t => t.stop());
+    ctx.close();
+    const out = new Blob(chunks, { type: mime.indexOf("video/mp4") === 0 ? "video/mp4" : "video/webm" });
+    out.dur = buf.duration;
+    return out;
+  }
+  function clock(sec) { sec = Math.round(sec); return Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0"); }
+
+  async function upload(file, kind, onProgress) {
+    if (!ns.assets) throw new Error("Uploading isn't available in this view.");
+    let blob = file, type;
+    if (kind === "image") { const p = await prepImage(file); blob = p.blob; type = p.type; }
+    else type = mediaType(file, kind);
+    let dur = 0;
+    if (type === "convert") { blob = await audioToVideo(file, onProgress); type = blob.type; dur = blob.dur || 0; }
+    if (blob.size > MAX) throw new Error(kind === "video" ? "This video is over 20 MB. Upload it to YouTube or Vimeo (it can be unlisted) and paste the link instead." : "This file is over 20 MB. Try a smaller version.");
+    try {
+      const r = await ns.assets.upload(blob, { type: type });
+      const out = { id: r.id, url: r.url, name: file.name };
+      if (dur) out.dur = Math.round(dur * 100) / 100;
+      return out;
+    } catch (e) {
+      const c = e && e.code;
+      if (c === "too_large") throw new Error("This file is over the 20 MB limit.");
+      if (c === "unsupported_type") throw new Error("That file type can't be stored here.");
+      if (c === "quota_or_state") throw new Error("The site's storage is full. Remove some files and try again.");
+      if (c === "rate_limited") throw new Error("Too many uploads at once. Wait a moment and try again.");
+      throw new Error("The upload didn't go through. Try again.");
+    }
+  }
+
+  /* ---------- edit dialog ---------- */
+  const FIELDS = {
+    text: [{ k: "heading", label: "Heading", hint: "optional" }, { k: "body", label: "Text", type: "area", rows: 10, hint: "Leave a blank line between paragraphs." }],
+    quote: [{ k: "text", label: "Quote", type: "area", rows: 4 }, { k: "by", label: "Who said it, or where it's from", hint: "optional" }],
+    photos: [{ k: "title", label: "Title above the photos", hint: "optional" }, { k: "items", label: "Photos", type: "photos" }],
+    story: [{ k: "image", label: "Photo", type: "file", kind: "image" }, { k: "caption", label: "Handwritten caption under the photo", hint: "optional" }, { k: "heading", label: "Heading" }, { k: "body", label: "Story", type: "area", rows: 7 }],
+    video: [{ k: "file", label: "Video file", type: "file", kind: "video", hint: "MP4 or WebM, up to 20 MB. iPhone MOV files usually work." }, { k: "link", label: "Or a link instead", type: "url", hint: "YouTube, Vimeo or Google Drive, for longer videos" }, { k: "title", label: "Title", hint: "optional" }, { k: "caption", label: "Caption", type: "area", rows: 3, hint: "optional" }],
+    audio: [{ k: "images", label: "Photos", type: "photos", hint: "as many as you like, shown above the play bar" }, { k: "file", label: "Audio file", type: "file", kind: "audio", hint: "M4A, MP3 or WAV. The site prepares it first, which takes about as long as the recording." }, { k: "title", label: "Title" }, { k: "caption", label: "What we're hearing", type: "area", rows: 3, hint: "optional" }],
+    spotify: [{ k: "link", label: "Spotify link", type: "url", hint: "In Spotify: ••• › Share › Copy Song Link" }, { k: "title", label: "Song" }, { k: "artist", label: "Artist" }, { k: "note", label: "Why this song", type: "area", rows: 3, hint: "optional" }],
+    download: [{ k: "file", label: "File", type: "file", kind: "doc", hint: "PDF works best. Up to 20 MB." }, { k: "link", label: "Or a link instead", type: "url", hint: "Google Drive, Docs or Slides" }, { k: "title", label: "Title" }, { k: "desc", label: "Description", type: "area", rows: 3, hint: "optional" }],
+    lesson: [{ k: "title", label: "Lesson title" }, { k: "grade", label: "Grade level", hint: "e.g. Grades 3–5" }, { k: "duration", label: "Length", hint: "e.g. 45 minutes" },
+      { k: "domain", label: "Domain", type: "select", options: ["", "Creative", "Embodied", "Social", "Interdependent", "Emotional", "All five domains"] },
+      { k: "objective", label: "Objective", type: "area", rows: 3 }, { k: "files", label: "Files to download", type: "files", kind: "doc", hint: "PDFs of the lesson plan, slides, worksheets" }, { k: "link", label: "Link", type: "url", hint: "optional, e.g. Google Slides" }],
+    page: [{ k: "title", label: "Page title" }, { k: "lede", label: "Introduction text", type: "area", rows: 7 }, { k: "summary", label: "One-line summary for the home page card", homeHide: true }, { k: "by", label: "Byline", homeOnly: true, hint: "e.g. your name" }, { k: "cover", label: "Cover photo", type: "file", kind: "image" }],
+    section: [{ k: "title", label: "Section title" }, { k: "kicker", label: "Small label under the title", hint: "optional" }]
+  };
+
+  const dlg = document.createElement("dialog");
+  dlg.id = "editor";
+  document.body.appendChild(dlg);
+  let dctx = null, busy = 0;
+
+  function fieldHtml(f, v) {
+    const id = "f-" + f.k;
+    const lab = "<span>" + esc(f.label) + (f.hint ? ' <span class="hint">· ' + esc(f.hint) + "</span>" : "") + "</span>";
+    if (f.type === "area") return '<label class="fld" for="' + id + '">' + lab + '<textarea id="' + id + '" data-k="' + f.k + '" rows="' + (f.rows || 4) + '">' + esc(v || "") + "</textarea></label>";
+    if (f.type === "select") return '<label class="fld" for="' + id + '">' + lab + '<select id="' + id + '" data-k="' + f.k + '">' + f.options.map(o => "<option" + (o === v ? " selected" : "") + ' value="' + esc(o) + '">' + esc(o || "Choose…") + "</option>").join("") + "</select></label>";
+    if (f.type === "file") {
+      const isImg = f.kind === "image";
+      return '<div class="fld">' + lab + '<div class="filebox" data-file="' + f.k + '">' + (v && v.url ? (isImg ? '<img src="' + esc(v.url) + '" alt="">' : "") + '<span class="fname">' + esc(v.name || "Uploaded file") + "</span>" : '<span class="fname">No file chosen</span>') +
+        '<label class="btn small ghost" for="' + id + '">' + (v && v.url ? "Replace" : "Choose file") + '</label><input type="file" id="' + id + '" data-up="' + f.k + '" data-kind="' + f.kind + '" accept="' + acceptFor(f.kind) + '">' +
+        (v && v.url ? '<button type="button" class="btn small ghost" data-act="f-clear" data-k="' + f.k + '">Remove</button>' : "") + '</div><div class="status" id="st-' + f.k + '" role="status"></div></div>';
+    }
+    if (f.type === "photos" || f.type === "files") {
+      const list = v || [], isImg = f.type === "photos";
+      return '<div class="fld">' + lab + '<div class="plist">' + list.map((it, i) => '<div class="prow">' + (isImg ? '<img src="' + esc(it.url) + '" alt="">' : "") +
+        (isImg ? '<input type="text" id="cap-' + i + '" data-cap="' + i + '" data-capk="' + f.k + '" placeholder="Caption" value="' + esc(it.caption || "") + '" aria-label="Caption for photo ' + (i + 1) + '">' : '<span class="fname" style="flex:1;min-width:0;overflow-wrap:anywhere">' + esc(it.name) + "</span>") +
+        (i > 0 ? '<button type="button" class="btn small ghost" data-act="f-up" data-k="' + f.k + '" data-i="' + i + '" aria-label="Move up">↑</button>' : "") +
+        '<button type="button" class="btn small ghost" data-act="f-rm" data-k="' + f.k + '" data-i="' + i + '">Remove</button></div>').join("") + "</div>" +
+        '<div class="filebox"><span class="fname">' + (list.length ? list.length + (isImg ? " photo" : " file") + (list.length > 1 ? "s" : "") : "Nothing added yet") + '</span><label class="btn small" for="' + "f-" + f.k + '">+ Add ' + (isImg ? "photos" : "files") + '</label><input type="file" multiple id="f-' + f.k + '" data-up="' + f.k + '" data-kind="' + (isImg ? "image" : f.kind) + '" data-multi="1" accept="' + acceptFor(isImg ? "image" : f.kind) + '"></div><div class="status" id="st-' + f.k + '" role="status"></div></div>';
+    }
+    return '<label class="fld" for="' + id + '">' + lab + '<input type="' + (f.type === "url" ? "url" : "text") + '" id="' + id + '" data-k="' + f.k + '" value="' + esc(v || "") + '"' + (f.type === "url" ? ' placeholder="https://"' : "") + "></label>";
+  }
+  function acceptFor(kind) {
+    return { image: "image/*", video: "video/mp4,video/webm,video/quicktime,.mp4,.m4v,.mov,.webm", audio: "audio/*,.m4a,.mp3,.wav,.aac,.mp4,.webm", doc: ".pdf,.txt,.md,.csv,.docx,.pptx,application/pdf" }[kind] || "";
+  }
+
+  function openDialog(ctx) {
+    dctx = ctx;
+    drawDialog();
+    if (!dlg.open) dlg.showModal();
+  }
+  function drawDialog() {
+    const ctx = dctx, d = ctx.draft;
+    let fields = FIELDS[ctx.kind];
+    if (ctx.kind === "page") fields = fields.filter(f => ctx.pk === "home" ? !f.homeHide : !f.homeOnly).filter(f => !(f.k === "summary" && !PAGES.find(p => p.key === ctx.pk).n));
+    dlg.innerHTML = '<form class="dlg" method="dialog"><header>' + esc(ctx.heading) + '</header><div class="body">' + fields.map(f => fieldHtml(f, d[f.k])).join("") +
+      '</div><div class="foot"><button type="button" class="btn ghost" data-act="d-cancel">Cancel</button><button type="submit" class="btn" id="d-ok"' + (busy ? " disabled" : "") + ">" + (ctx.isNew ? "Add to page" : "Done") + "</button></div></form>";
+  }
+  function readInputs() {
+    dlg.querySelectorAll("[data-k]").forEach(el => { if (el.tagName !== "BUTTON") dctx.draft[el.dataset.k] = el.value; });
+    dlg.querySelectorAll("[data-cap]").forEach(el => { const it = (dctx.draft[el.dataset.capk || "items"] || [])[+el.dataset.cap]; if (it) it.caption = el.value; });
+  }
+
+  dlg.addEventListener("change", async e => {
+    const inp = e.target;
+    if (!inp.dataset || !inp.dataset.up) return;
+    readInputs();
+    const k = inp.dataset.up, kind = inp.dataset.kind, files = Array.from(inp.files || []);
+    if (!files.length) return;
+    const st = () => document.getElementById("st-" + k);
+    busy++; const ok = document.getElementById("d-ok"); if (ok) ok.disabled = true;
+    let errMsg = "";
+    for (let i = 0; i < files.length; i++) {
+      const s = st(); if (s) { s.className = "status"; s.textContent = files.length > 1 ? "Uploading " + (i + 1) + " of " + files.length + "…" : "Uploading…"; }
+      try {
+        const a = await upload(files[i], kind, (t, total) => {
+          const s2 = st(); if (s2) s2.textContent = "Preparing audio… " + clock(t) + " of " + clock(total) + ". Keep this window open.";
+        });
+        { const s3 = st(); if (s3) s3.textContent = "Uploading…"; }
+        if (inp.dataset.multi) { (dctx.draft[k] = dctx.draft[k] || []).push(kind === "image" ? { id: a.id, url: a.url, caption: "" } : a); }
+        else dctx.draft[k] = a;
+      } catch (err) { errMsg = files[i].name + ": " + err.message; }
+    }
+    busy--;
+    drawDialog();
+    if (errMsg) { const s = st(); if (s) { s.className = "status err"; s.textContent = errMsg; } }
+  });
+
+  dlg.addEventListener("submit", e => {
+    e.preventDefault();
+    if (busy) return;
+    readInputs();
+    dctx.commit(dctx.draft);
+    dlg.close();
+    changed();
+  });
+
+  dlg.addEventListener("click", e => {
+    const t = e.target.closest("[data-act]");
+    if (!t) return;
+    const a = t.dataset.act;
+    if (a === "d-cancel") { dlg.close(); return; }
+    readInputs();
+    if (a === "f-clear") { dctx.draft[t.dataset.k] = null; drawDialog(); }
+    if (a === "f-rm") { dctx.draft[t.dataset.k].splice(+t.dataset.i, 1); drawDialog(); }
+    if (a === "f-up") { move(dctx.draft[t.dataset.k], +t.dataset.i, -1); drawDialog(); }
+  });
+
+  /* ---------- lightbox ---------- */
+  const lb = document.createElement("dialog");
+  lb.id = "lb";
+  document.body.appendChild(lb);
+  let lbItems = [], lbI = 0;
+  function openLb(items, i) { lbItems = items; lbI = i; drawLb(); if (!lb.open) lb.showModal(); }
+  function drawLb() {
+    const it = lbItems[lbI];
+    lb.innerHTML = '<div class="lbx"><img src="' + esc(it.url) + '" alt="' + esc(it.caption || "") + '">' + (it.caption ? '<div class="cap">' + esc(it.caption) + "</div>" : "") +
+      '<div class="ctl">' + (lbItems.length > 1 ? '<button type="button" data-lb="-1">← Previous</button>' : "") + '<button type="button" data-lb="x">Close</button>' + (lbItems.length > 1 ? '<button type="button" data-lb="1">Next →</button>' : "") + "</div></div>";
+  }
+  lb.addEventListener("click", e => {
+    const b = e.target.closest("[data-lb]");
+    if (!b) { if (e.target === lb) lb.close(); return; }
+    if (b.dataset.lb === "x") return lb.close();
+    lbI = (lbI + +b.dataset.lb + lbItems.length) % lbItems.length; drawLb();
+  });
+  lb.addEventListener("keydown", e => {
+    if (lbItems.length < 2) return;
+    if (e.key === "ArrowRight") { lbI = (lbI + 1) % lbItems.length; drawLb(); }
+    if (e.key === "ArrowLeft") { lbI = (lbI - 1 + lbItems.length) % lbItems.length; drawLb(); }
+  });
+
+  /* ---------- page actions ---------- */
+  const pendingDel = {};
+  app.addEventListener("click", async e => {
+    const t = e.target.closest("[data-act]");
+    if (!t) return;
+    const a = t.dataset.act, pk = t.dataset.p, sid = t.dataset.s, bid = t.dataset.b;
+    if (a === "menu") { menuOpen = !menuOpen; render(); return; }
+    if (a === "edit-toggle") { editing = !editing; ss("sp-ui", { route: route, editing: editing }); render(); return; }
+    if (a === "save") return save();
+    if (a === "discard") { state = norm(clone(saved)); dirty = false; ss("sp-draft", null); render(); toast("Changes discarded."); return; }
+    if (a === "draft-restore") { state = norm(pendingDraft); pendingDraft = null; dirty = true; editing = true; render(); toast("Your unsaved edits are back. Choose Save changes to keep them."); return; }
+    if (a === "draft-drop") { pendingDraft = null; ss("sp-draft", null); render(); return; }
+    if (a === "jump") { const el = document.getElementById("sec-" + sid); if (el) el.scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" }); return; }
+    if (a === "dl") {
+      if (!ns.downloads) return;
+      e.preventDefault();
+      try {
+        const blob = await (await fetch(t.dataset.url)).blob();
+        await ns.downloads.save({ filename: t.dataset.name, data: blob });
+      } catch (err) {
+        const c = err && err.code;
+        if (c !== "declined") toast(c === "rejected_extension" ? "This file type can't be downloaded here." : "The download didn't start. Try again in a moment.");
+      }
+      return;
+    }
+    if (a === "lb") {
+      const b = findBlk(pk, sid, bid);
+      if (!b) return;
+      const items = b.type === "photos" ? b.items.filter(x => x.url) : b.type === "audio" ? audioImgs(b) : [{ url: b.image.url, caption: b.caption }];
+      openLb(items, +t.dataset.i || 0); return;
+    }
+    if (a === "lb-cover") { const c = state.pages[pk].cover; openLb([c], 0); return; }
+    if (a === "lb-share") { const p = state.pages[pk]; openLb([{ url: p.shareImg.url, caption: p.shareCap }], 0); return; }
+
+    /* edit-only actions */
+    if (!editing) return;
+    const pg = state.pages[pk];
+    if (a === "page-edit") {
+      openDialog({ kind: "page", pk: pk, heading: "Edit page header", draft: { title: pg.title, lede: pg.lede, summary: pg.summary, by: pg.by, cover: pg.cover },
+        commit: d => { pg.title = d.title || pg.title; pg.lede = d.lede; if (d.summary !== undefined) pg.summary = d.summary; if (d.by !== undefined) pg.by = d.by; pg.cover = d.cover || null; } });
+    }
+    if (a === "sec-add") {
+      openDialog({ kind: "section", heading: "New section", isNew: true, draft: { title: "", kicker: "" },
+        commit: d => { pg.sections.push({ id: uid(), title: d.title, kicker: d.kicker, blocks: [] }); } });
+    }
+    if (a === "sec-edit") {
+      const s = findSec(pk, sid);
+      openDialog({ kind: "section", heading: "Edit section", draft: { title: s.title, kicker: s.kicker }, commit: d => { s.title = d.title; s.kicker = d.kicker; } });
+    }
+    if (a === "sec-up" || a === "sec-down") { move(pg.sections, pg.sections.findIndex(s => s.id === sid), a === "sec-up" ? -1 : 1); changed(); }
+    if (a === "sec-del" || a === "blk-del") {
+      const key = a + sid + (bid || "");
+      if (!pendingDel[key]) { pendingDel[key] = 1; t.textContent = "Click again to delete"; t.classList.add("warn"); setTimeout(() => { delete pendingDel[key]; if (t.isConnected) { t.textContent = a === "sec-del" ? "Delete section" : "Delete"; t.classList.remove("warn"); } }, 3500); return; }
+      delete pendingDel[key];
+      if (a === "sec-del") pg.sections = pg.sections.filter(s => s.id !== sid);
+      else { const s = findSec(pk, sid); s.blocks = s.blocks.filter(b => b.id !== bid); }
+      changed();
+    }
+    if (a === "share-up") { shareKey = pk; shareInput.click(); return; }
+    if (a === "share-rm") { pg.shareImg = null; changed(); return; }
+    if (a === "blk-below") {
+      insertAfter = insertAfter && insertAfter.s === sid && insertAfter.b === bid ? null : { s: sid, b: bid };
+      render(); return;
+    }
+    if (a === "add") {
+      const s = findSec(pk, sid), type = t.dataset.t, after = t.dataset.after;
+      openDialog({ kind: type, heading: "Add " + TYPES[type].toLowerCase(), isNew: true, draft: { items: [], files: [], images: [] },
+        commit: d => {
+          const blk = Object.assign({ id: uid(), type: type }, d);
+          const i = after ? s.blocks.findIndex(b => b.id === after) : -1;
+          if (i >= 0) s.blocks.splice(i + 1, 0, blk); else s.blocks.push(blk);
+          insertAfter = null;
+        } });
+    }
+    if (a === "blk-edit") {
+      const b = findBlk(pk, sid, bid);
+      const draft = clone(b);
+      if (b.type === "audio") { draft.images = audioImgs(b).map(x => ({ id: x.id, url: x.url, caption: x.caption || "" })); delete draft.image; }
+      openDialog({ kind: b.type, heading: "Edit " + TYPES[b.type].toLowerCase(), draft: draft, commit: d => { Object.assign(b, d); if (b.type === "audio") delete b.image; } });
+    }
+    if (a === "blk-up" || a === "blk-down") { const s = findSec(pk, sid); move(s.blocks, s.blocks.findIndex(b => b.id === bid), a === "blk-up" ? -1 : 1); changed(); }
+  });
+
+  /* ---------- routing & boot ---------- */
+  function readHash() {
+    const h = (location.hash || "").replace(/^#/, "");
+    return PAGES.some(p => p.key === h) ? h : null;
+  }
+  window.addEventListener("hashchange", () => {
+    const h = readHash();
+    if (h && h !== route) { route = h; menuOpen = false; render(); window.scrollTo(0, 0); }
+  });
+
+  const ui = ss("sp-ui");
+  route = readHash() || (ui && ui.route) || "home";
+  const draft = ss("sp-draft");
+  const fits = s => s && s.pages && PAGES.every(p => s.pages[p.key]);
+  if (draft && (draft.rev === saved.rev || !fits(draft.state))) ss("sp-draft", null);
+  else if (draft && draft.state) pendingDraft = draft.state;
+  render();
+
+  (async function connect() {
+    if (!window.claude || !window.claude.use) return;
+    try {
+      const r = await Promise.all([claude.use("artifact"), claude.use("assets"), claude.use("downloads")]);
+      ns.artifact = r[0]; ns.assets = r[1]; ns.downloads = r[2];
+    } catch (e) { /* view-only */ }
+    if (ns.assets && ns.artifact && ui && ui.editing) editing = true;
+    render();
+  })();
+})();
+</script></body></html>
