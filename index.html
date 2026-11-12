@@ -254,6 +254,39 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
 .lbx .cap{font-family:var(--f-hand);font-size:1.6rem;color:#F2EFE8;text-align:center}
 .lbx .ctl{display:flex;gap:.6rem}
 .lbx .ctl button{font-family:var(--f-ui);background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.25);border-radius:999px;padding:.45rem 1rem;cursor:pointer}
+/* collapsible sections: Reflection on every domain, the four Embodied senses */
+.fold{max-width:var(--measure);margin:1rem auto 0;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.fold > summary{list-style:none;cursor:pointer;display:flex;align-items:baseline;flex-wrap:wrap;gap:.2rem .75rem;padding:1rem 3rem 1rem 1.2rem;position:relative;font-family:var(--f-display);font-size:clamp(1.4rem,3.4vw,1.8rem);line-height:1.2}
+.fold > summary::-webkit-details-marker{display:none}
+.fold > summary small{font-family:var(--f-ui);font-size:.75rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.fold > summary::after{content:"";position:absolute;right:1.3rem;top:50%;width:.55rem;height:.55rem;margin-top:-.4rem;border-right:2px solid var(--gold);border-bottom:2px solid var(--gold);transform:rotate(45deg);transition:transform .2s}
+.fold[open] > summary::after{transform:rotate(-135deg);margin-top:-.1rem}
+.fold > summary:hover{color:var(--gold)}
+.fold .fold-body{padding:.25rem 1.2rem 1.4rem}
+.fold .fold-body > .section{padding:0;max-width:none}
+.fold-list{padding-top:1rem}
+.fold.refl{margin-top:3rem;border-color:color-mix(in srgb,var(--dc,var(--gold)) 50%,var(--line))}
+/* Creative: video on the left, photos on the right */
+.b-duo{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:1.5rem;align-items:start}
+.b-duo.solo{grid-template-columns:minmax(0,1fr)}
+.b-duo video{display:block;width:100%;max-width:100%;background:#000;border-radius:3px;box-shadow:var(--shadow)}
+.b-duo .drop{aspect-ratio:16/10}
+.b-duo .jgrid > .print{flex-basis:calc(var(--r) * 6.5rem)}
+@media (max-width:700px){.b-duo{grid-template-columns:minmax(0,1fr)}}
+/* Emotional: a song whose words grow as they are sung */
+.b-lyr{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:1.2rem}
+.lyr-head{display:flex;gap:1rem;align-items:center}
+.lyr-head .grow{flex:1;min-width:0}
+.lyr-head h3{font-size:1.35rem}
+.lyr{position:relative;max-height:26rem;overflow-y:auto;margin-top:1rem;padding:2.5rem .5rem 9rem;text-align:center;scroll-behavior:smooth;-webkit-mask-image:linear-gradient(transparent,#000 10%,#000 78%,transparent);mask-image:linear-gradient(transparent,#000 10%,#000 78%,transparent)}
+.lyr .ln{margin:0 0 .55rem;line-height:1.3}
+.lyr .gap{height:1.2rem}
+.lyr .w{display:inline-block;margin:0 .12em;font-size:1rem;color:var(--muted);opacity:.6;transition:font-size .4s ease,color .4s,opacity .4s}
+.lyr .w.on{font-size:1.3rem;color:var(--ink);opacity:1}
+.lyr .w.now{font-size:1.8rem;color:var(--c-emotional);opacity:1}
+.lyr-sync{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center;margin-top:1rem;font-family:var(--f-ui)}
+.lyr-sync .live{display:flex;flex-wrap:wrap;gap:.5rem;align-items:center}
+.lyr-hint{font-family:var(--f-ui);font-size:.85rem;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 <div id="app"></div>
@@ -274,7 +307,8 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
   const DOMAINS = PAGES.filter(p => p.n);
   const TYPES = {
     text: "Text", quote: "Quote", photos: "Photos", story: "Photo + story",
-    video: "Video", audio: "Audio", spotify: "Spotify song", download: "Download", lesson: "Lesson"
+    video: "Video", audio: "Audio", spotify: "Spotify song", download: "Download", lesson: "Lesson",
+    duo: "Video + photos", lyrics: "Song with words"
   };
   const IMG_OK = ["image/png", "image/jpeg", "image/gif", "image/webp"];
   const MAX = 20 * 1024 * 1024;
@@ -292,7 +326,35 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
   function ss(k, v) { try { if (v === undefined) return JSON.parse(sessionStorage.getItem(k) || "null"); if (v === null) sessionStorage.removeItem(k); else sessionStorage.setItem(k, JSON.stringify(v)); } catch (e) { return null; } }
   function safeUrl(u) { u = String(u || "").trim(); return /^https?:\/\//i.test(u) ? u : ""; }
   const SITE_DEFAULTS = { eyebrow: "A portfolio", domainsHeading: "Five ways Grandpa shared", epiLabel: "From the introduction", footer: "The Sharing Project · Learning Design, Innovation, and Technology" };
-  function norm(s) { s.site = Object.assign({}, SITE_DEFAULTS, s.site || {}); return s; }
+  function norm(s) {
+    s.site = Object.assign({}, SITE_DEFAULTS, s.site || {});
+    /* one-time layout changes: five Creative parts, four Embodied dropdowns, a song on Emotional */
+    if ((s.mig || 0) < 1) {
+      const cr = s.pages.creative;
+      if (cr && !cr.sections.some(x => x.duo)) {
+        cr.sections = cr.sections.filter(x => x.blocks.length || x.title).concat([1, 2, 3, 4, 5].map(n => ({
+          id: "cr-" + n, title: "", kicker: "", wide: true, duo: true, suggest: ["duo", "text"],
+          blocks: [{ id: "crd-" + n, type: "duo", images: [], file: null, link: "", caption: "" }] })));
+      }
+      const em = s.pages.embodied;
+      if (em) {
+        em.fold = true; delete em.senseNav;
+        const snd = em.sections.find(x => x.id === "sound");
+        if (snd && !snd.blocks.length && em.sections.some(x => x.id === "sight")) em.sections = em.sections.filter(x => x !== snd);
+      }
+      const mo = s.pages.emotional, m = mo && mo.sections.find(x => !x.reflect);
+      if (m && !m.blocks.some(b => b.type === "lyrics")) {
+        m.blocks.unshift({ id: "song-1", type: "lyrics", title: "", artist: "", lyrics: "", note: "", file: null });
+        m.suggest = ["lyrics", "spotify", "audio", "text"];
+      }
+      s.mig = 1;
+    }
+    DOMAINS.forEach(d => {
+      const p = s.pages[d.key];
+      if (p && !p.sections.some(x => x.reflect)) p.sections.push({ id: "reflection", title: "Reflection", kicker: "", reflect: true, suggest: ["text", "quote", "photos"], blocks: [] });
+    });
+    return s;
+  }
   norm(state);
 
   /* Editable text: plain output for visitors, click-to-type in edit mode. */
@@ -372,6 +434,38 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
             : (editing ? '<button type="button" class="btn small" data-act="blk-edit" ' + ref + ' style="margin-top:.75rem">+ Add audio</button>' : "")) + "</div></div></div>";
         break;
       }
+      case "duo": {
+        const imgs = (b.images || []).filter(x => x.url), link = safeUrl(b.link);
+        let v = "", p = "";
+        if (b.file && b.file.url) v = '<video controls playsinline preload="metadata" src="' + esc(b.file.url) + '"></video>';
+        else if (link) v = '<div class="card"><div class="disc" aria-hidden="true"></div><div class="grow"><h3>Watch the video</h3><div class="sub">Opens in a new tab</div></div><a class="btn" href="' + esc(link) + '" target="_blank" rel="noopener">Watch ↗</a></div>';
+        else if (editing) v = '<button type="button" class="drop" data-act="blk-edit" ' + ref + ">+ Add video</button>";
+        if (imgs.length) p = '<div class="jgrid' + (imgs.length === 1 ? " one" : "") + '">' + imgs.map((it, i) => printHtml(it, 'data-act="lb" ' + ref + ' data-i="' + i + '"', "")).join("") + "</div>";
+        else if (editing) p = '<button type="button" class="drop" data-act="blk-edit" ' + ref + ">+ Add photos</button>";
+        if (!v && !p && !b.caption) break;
+        h = '<div class="b-duo' + (v && p ? "" : " solo") + '">' + (v ? '<div class="duo-v">' + v + "</div>" : "") + (p ? '<div class="duo-p">' + p + "</div>" : "") + "</div>" +
+          E("caption", "div", "media-cap", { multi: 1, ph: "Caption (optional)" });
+        break;
+      }
+      case "lyrics": {
+        const has = b.file && b.file.url, lines = lyrLines(b.lyrics), hasWords = lines.some(l => l.text);
+        if (!editing && !has && !hasWords) break;
+        let wi = 0;
+        const words = lines.map(l => l.text ? '<p class="ln">' + l.text.split(/\s+/).map(w => '<span class="w" data-w="' + (wi++) + '">' + esc(w) + "</span>").join(" ") + "</p>" : '<div class="gap"></div>').join("");
+        h = '<div class="b-lyr" ' + ref + '><div class="lyr-head"><div class="disc" aria-hidden="true"></div><div class="grow">' +
+          (editing || b.title ? E("title", "h3", "", { ph: "Song title" }) : "<h3>Listen</h3>") + E("artist", "div", "sub", { ph: "Artist (optional)" }) + "</div></div>" +
+          (has ? '<div class="player" data-dur="' + (+b.file.dur || 0) + '"><button type="button" class="pp" aria-label="Play">&#9654;</button>' +
+              '<input type="range" min="0" max="1000" step="1" value="0" aria-label="Position in song">' +
+              '<span class="t">0:00 / ' + (b.file.dur ? clock(b.file.dur) : "–:––") + '</span><audio preload="metadata" src="' + esc(b.file.url) + '"></audio></div>'
+            : (editing ? '<button type="button" class="btn small" data-act="blk-edit" ' + ref + ' style="margin-top:.75rem">+ Add the song</button>' : "")) +
+          (hasWords ? '<div class="lyr">' + words + "</div>" : (editing ? '<p class="empty-note" style="margin-top:1rem">No words yet. Choose “Edit song with words” to paste them.</p>' : "")) +
+          E("note", "div", "media-cap", { multi: 1, ph: "A note about this song (optional)" }) +
+          (editing && has && hasWords ? '<div class="lyr-sync"><button type="button" class="btn small ghost" data-act="lyr-sync" ' + ref + ">Sync words to the song</button>" +
+            '<span class="lyr-hint" data-sync-hint>' + (lines.some(l => l.t != null) ? "The words are timed to the song." : "Until you sync, the words are spread evenly across the song.") + "</span>" +
+            '<span class="live" hidden><button type="button" class="btn small" data-act="lyr-mark">Next line</button><button type="button" class="btn small ghost" data-act="lyr-stop">Stop</button></span></div>' : "") +
+          "</div>";
+        break;
+      }
       case "spotify": {
         const link = safeUrl(b.link);
         h = '<div class="card"><div class="disc" aria-hidden="true"></div><div class="grow">' + E("title", "h3", "", { ph: "Song" }) +
@@ -418,20 +512,33 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
       sug.map(t => btn(t, ' class="sug"')).join("") + rest.map(t => btn(t, "")).join("") + "</div>";
   }
 
-  function sectionHtml(pk, sec, si, count) {
+  function secTools(pk, sec, si, count) {
+    const ref = 'data-p="' + pk + '" data-s="' + sec.id + '"';
+    return '<div class="ed-tools ed-bar sec-tools"><button type="button" data-act="sec-edit" ' + ref + ">" + (sec.title ? "Rename section" : "Add section title") + "</button>" +
+      (sec.reflect ? "" : (si > 0 ? '<button type="button" data-act="sec-up" ' + ref + ' aria-label="Move section up">↑</button>' : "") +
+        (si < count - 1 ? '<button type="button" data-act="sec-down" ' + ref + ' aria-label="Move section down">↓</button>' : "") +
+        '<button type="button" data-act="sec-del" ' + ref + ">Delete section</button>") + "</div>";
+  }
+
+  /* a section shown as a dropdown: the title is the button that opens it */
+  const openFolds = new Set();
+  function foldHtml(pk, sec, si, count) {
+    const key = pk + "/" + sec.id, open = editing || openFolds.has(key);
+    return '<details class="fold' + (sec.reflect ? " refl" : "") + '" data-fold="' + esc(key) + '"' + (open ? " open" : "") + ' style="--dc:var(--c-' + pk + ')"><summary>' +
+      esc(sec.title || (editing ? "Untitled section" : "")) + (sec.kicker ? "<small>" + esc(sec.kicker) + "</small>" : "") + '</summary><div class="fold-body">' +
+      sectionHtml(pk, sec, si, count, true) + "</div></details>";
+  }
+
+  function sectionHtml(pk, sec, si, count, inFold) {
     const visible = sec.blocks.some(b => blockHtml(pk, sec, b, 0, 0) !== "");
-    if (!editing && !visible && !(state.pages[pk].senseNav)) return "";
+    if (!editing && !visible && !(state.pages[pk].senseNav) && !inFold) return "";
     let storyIdx = 0;
     const blocks = sec.blocks.map((b, i) => blockHtml(pk, sec, b, i, b.type === "story" ? storyIdx++ : 0)).join("");
-    const ref = 'data-p="' + pk + '" data-s="' + sec.id + '"';
     let h = '<section class="section' + (sec.wide || sec.grid ? " wide" : "") + '">';
-    if (sec.title || sec.kicker || editing) {
-      h += '<div class="sec-head" id="sec-' + esc(sec.id) + '">' + ed(P(pk, sec.id, "", "title"), sec.title, "h2", "", { ph: "Section title (optional)" }) +
-        ed(P(pk, sec.id, "", "kicker"), sec.kicker, "div", "kicker", { ph: "Small label (optional)" }) +
-        '<div class="ed-tools ed-bar sec-tools"><button type="button" data-act="sec-edit" ' + ref + ">" + (sec.title ? "Rename section" : "Add section title") + "</button>" +
-        (si > 0 ? '<button type="button" data-act="sec-up" ' + ref + ' aria-label="Move section up">↑</button>' : "") +
-        (si < count - 1 ? '<button type="button" data-act="sec-down" ' + ref + ' aria-label="Move section down">↓</button>' : "") +
-        '<button type="button" data-act="sec-del" ' + ref + ">Delete section</button></div></div>";
+    if (inFold) { if (editing) h += secTools(pk, sec, si, count); }
+    else if (sec.title || sec.kicker || editing) {
+      h += '<div class="sec-head" id="sec-' + esc(sec.id) + '">' + ed(P(pk, sec.id, "", "title"), sec.title, "h2", "", { ph: sec.duo ? "Title for this part (optional)" : "Section title (optional)" }) +
+        ed(P(pk, sec.id, "", "kicker"), sec.kicker, "div", "kicker", { ph: "Small label (optional)" }) + secTools(pk, sec, si, count) + "</div>";
     }
     if (!sec.blocks.length && !editing) h += '<p class="empty-note">More is being added here soon.</p>';
     h += '<div class="' + (sec.grid ? "lesson-grid" : "blocks") + '">' + blocks + "</div>" + addBarHtml(pk, sec) + "</section>";
@@ -462,11 +569,16 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
       h += '<nav class="senses" aria-label="Senses"><div class="wrap"><div class="row">' + pg.sections.map(s => '<button type="button" data-act="jump" data-s="' + s.id + '">' + esc(s.title) + (s.kicker ? "<small>" + esc(s.kicker) + "</small>" : "") + "</button>").join("") + "</div></div></nav>";
     }
     h += '<div class="wrap">';
-    pg.sections.forEach((s, i) => {
-      h += sectionHtml(pk, s, i, pg.sections.length);
+    const main = pg.sections.filter(s => !s.reflect);
+    if (pg.fold) h += '<div class="fold-list">';
+    main.forEach((s, i) => {
+      h += pg.fold ? foldHtml(pk, s, i, main.length) : sectionHtml(pk, s, i, main.length);
       if (pk === "home" && s.id === "welcome") h += domainsHtml();
     });
+    if (pg.fold) h += "</div>";
     h += '<div class="ed-tools ed-add add-sec"><button type="button" class="sug" data-act="sec-add" data-p="' + pk + '">+ Add a section to this page</button></div>';
+    /* Reflection always sits last, below everything else */
+    pg.sections.filter(s => s.reflect).forEach(s => { h += foldHtml(pk, s, 0, 1); });
     /* reading order: Introduction → five domains → Sharing the Sharing Project */
     const seq = PAGES.slice(1), at = seq.findIndex(p => p.key === pk);
     if (at >= 0) {
@@ -609,6 +721,104 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
     const pr = im.parentElement; if (!pr || !pr.parentElement || !pr.parentElement.classList.contains("jgrid")) return;
     pr.style.setProperty("--r", (im.naturalWidth / im.naturalHeight).toFixed(3));
   }, true);
+  app.addEventListener("toggle", e => {
+    const d = e.target; if (!d || !d.dataset || !d.dataset.fold || editing) return;
+    if (d.open) openFolds.add(d.dataset.fold); else openFolds.delete(d.dataset.fold);
+  }, true);
+
+  /* ---------- song with words ----------
+     Each line may start with a time like [1:05.2] (set by "Sync words to the song").
+     Lines without one are spread between their timed neighbours by word count. */
+  function lyrLines(txt) {
+    return String(txt || "").split("\n").map(raw => {
+      const m = /^\s*\[(\d+):(\d{1,2}(?:\.\d+)?)\]\s*/.exec(raw);
+      return { t: m ? +m[1] * 60 + +m[2] : null, text: (m ? raw.slice(m[0].length) : raw).trim() };
+    });
+  }
+  function stamp(t) { return Math.floor(t / 60) + ":" + (t % 60).toFixed(1).padStart(4, "0"); }
+  function lyrTimes(lines, D) {
+    const L = lines.filter(l => l.text).map(l => ({ t: l.t, w: l.text.split(/\s+/) }));
+    if (!L.length) return [];
+    if (L[0].t == null) L[0].t = 0;
+    let last = 0;
+    L.forEach(l => { if (l.t != null) { l.t = Math.max(l.t, last); last = l.t; } });
+    const end = Math.max(D || 0, last + 1);
+    for (let i = 1; i < L.length;) {
+      if (L[i].t != null) { i++; continue; }
+      let j = i; while (j < L.length && L[j].t == null) j++;
+      const a = L[i - 1].t, z = j < L.length ? L[j].t : end;
+      const wts = L.slice(i - 1, j).map(l => l.w.length), tot = wts.reduce((x, y) => x + y, 0);
+      let acc = 0;
+      for (let k = i; k < j; k++) { acc += wts[k - i]; L[k].t = a + (z - a) * acc / tot; }
+      i = j;
+    }
+    const out = [];
+    L.forEach((l, i) => {
+      const next = i + 1 < L.length ? L[i + 1].t : end;
+      const stop = Math.min(next, l.t + l.w.length * 0.8 + 1.5);
+      const wts = l.w.map(w => w.length + 3), tot = wts.reduce((x, y) => x + y, 0);
+      let acc = 0;
+      wts.forEach(x => { out.push(l.t + (stop - l.t) * acc / tot); acc += x; });
+    });
+    return out;
+  }
+  function lyrDraw(el) {
+    const a = el.querySelector("audio"), box = el.querySelector(".lyr");
+    if (!a || !box) return;
+    const pl = playerOf(a); if (pl && pl._probe) return;
+    const D = pl ? plDur(pl) : 0, b = findBlk(el.dataset.p, el.dataset.s, el.dataset.b);
+    const src = b ? b.lyrics : "";
+    if (!el._t || el._D !== D || el._src !== src) { el._t = lyrTimes(lyrLines(src), D); el._D = D; el._src = src; el._i = undefined; }
+    const T = el._t, cur = a.currentTime || 0;
+    let idx = -1;
+    if (cur > 0.05 || !a.paused) for (let j = 0; j < T.length && T[j] <= cur; j++) idx = j;
+    if (idx === el._i) return;
+    el._i = idx;
+    const ws = box.querySelectorAll(".w");
+    ws.forEach((w, j) => { w.classList.toggle("on", j < idx); w.classList.toggle("now", j === idx); });
+    const ln = ws[idx] && ws[idx].parentElement;
+    box.scrollTop = ln ? Math.max(0, ln.offsetTop - box.clientHeight * 0.38) : 0;
+  }
+  ["timeupdate", "seeked", "play", "pause", "ended"].forEach(ev => app.addEventListener(ev, e => {
+    const a = e.target; if (!a || a.tagName !== "AUDIO") return;
+    const el = a.closest(".b-lyr"); if (!el) return;
+    if (ev === "ended" && sync && sync.au === a) syncEnd();
+    if (ev === "play") { const loop = () => { lyrDraw(el); if (!a.paused) requestAnimationFrame(loop); }; requestAnimationFrame(loop); }
+    else lyrDraw(el);
+  }, true));
+
+  /* Sync: play the song and tap "Next line" (or press Space) as each line begins. */
+  let sync = null;
+  function syncHint() {
+    if (!sync) return;
+    const hint = sync.el.querySelector("[data-sync-hint]");
+    const nxt = sync.idx[sync.i];
+    if (hint) hint.textContent = nxt == null ? "" : "Tap Next line (or press Space) when this starts: “" + lyrLines(sync.raw[nxt])[0].text + "”";
+  }
+  function syncMark() {
+    if (!sync) return;
+    sync.times.push(sync.au.currentTime);
+    sync.i++;
+    if (sync.i >= sync.idx.length) { syncEnd(); return; }
+    syncHint();
+  }
+  function syncEnd() {
+    if (!sync) return;
+    const s = sync; sync = null;
+    s.au.pause();
+    if (!s.times.length) { render(); return; }
+    const out = s.raw.slice();
+    s.times.forEach((t, k) => { const ri = s.idx[k]; out[ri] = "[" + stamp(t) + "] " + lyrLines(s.raw[ri])[0].text; });
+    s.b.lyrics = out.join("\n");
+    changed();
+    toast("Timed " + s.times.length + " of " + s.idx.length + " lines. Choose Save changes to keep it.");
+  }
+  document.addEventListener("keydown", e => {
+    if (!sync || (e.key !== " " && e.key !== "Enter")) return;
+    const t = e.target;
+    if (t && (t.tagName === "BUTTON" || t.tagName === "INPUT" || t.tagName === "TEXTAREA" || t.isContentEditable)) return;
+    e.preventDefault(); syncMark();
+  });
 
   /* typing into editable text updates state without re-rendering, so the cursor stays put */
   let draftT;
@@ -809,6 +1019,11 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
     story: [{ k: "image", label: "Photo", type: "file", kind: "image" }, { k: "caption", label: "Handwritten caption under the photo", hint: "optional" }, { k: "heading", label: "Heading" }, { k: "body", label: "Story", type: "area", rows: 7 }],
     video: [{ k: "file", label: "Video file", type: "file", kind: "video", hint: "MP4 or WebM, up to 20 MB. iPhone MOV files usually work." }, { k: "link", label: "Or a link instead", type: "url", hint: "YouTube, Vimeo or Google Drive, for longer videos" }, { k: "title", label: "Title", hint: "optional" }, { k: "caption", label: "Caption", type: "area", rows: 3, hint: "optional" }],
     audio: [{ k: "images", label: "Photos", type: "photos", hint: "as many as you like, shown above the play bar" }, { k: "file", label: "Audio file", type: "file", kind: "audio", hint: "M4A, MP3 or WAV. The site prepares it first, which takes about as long as the recording." }, { k: "title", label: "Title" }, { k: "caption", label: "What we're hearing", type: "area", rows: 3, hint: "optional" }],
+    duo: [{ k: "file", label: "Video (shown on the left)", type: "file", kind: "video", hint: "MP4 or WebM, up to 20 MB. iPhone MOV files usually work." }, { k: "link", label: "Or a video link instead", type: "url", hint: "YouTube, Vimeo or Google Drive, for longer videos" },
+      { k: "images", label: "Photos (shown on the right)", type: "photos", hint: "as many as you like" }, { k: "caption", label: "Caption", type: "area", rows: 3, hint: "optional" }],
+    lyrics: [{ k: "file", label: "Song", type: "file", kind: "audio", hint: "M4A, MP3 or WAV. The site prepares it first, which takes about as long as the song." }, { k: "title", label: "Song title" }, { k: "artist", label: "Artist", hint: "optional" },
+      { k: "lyrics", label: "Words", type: "area", rows: 12, hint: "One sung line per line, with a blank line between verses. Afterwards, use “Sync words to the song” to match each line to the music." },
+      { k: "note", label: "A note about this song", type: "area", rows: 3, hint: "optional" }],
     spotify: [{ k: "link", label: "Spotify link", type: "url", hint: "In Spotify: ••• › Share › Copy Song Link" }, { k: "title", label: "Song" }, { k: "artist", label: "Artist" }, { k: "note", label: "Why this song", type: "area", rows: 3, hint: "optional" }],
     download: [{ k: "file", label: "File", type: "file", kind: "doc", hint: "PDF works best. Up to 20 MB." }, { k: "link", label: "Or a link instead", type: "url", hint: "Google Drive, Docs or Slides" }, { k: "title", label: "Title" }, { k: "desc", label: "Description", type: "area", rows: 3, hint: "optional" }],
     lesson: [{ k: "title", label: "Lesson title" }, { k: "grade", label: "Grade level", hint: "e.g. Grades 3–5" }, { k: "duration", label: "Length", hint: "e.g. 45 minutes" },
@@ -961,7 +1176,7 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
     if (a === "lb") {
       const b = findBlk(pk, sid, bid);
       if (!b) return;
-      const items = b.type === "photos" ? b.items.filter(x => x.url) : b.type === "audio" ? audioImgs(b) : [{ url: b.image.url, caption: b.caption }];
+      const items = b.type === "photos" ? b.items.filter(x => x.url) : b.type === "audio" ? audioImgs(b) : b.type === "duo" ? (b.images || []).filter(x => x.url) : [{ url: b.image.url, caption: b.caption }];
       openLb(items, +t.dataset.i || 0); return;
     }
     if (a === "lb-cover") { const c = state.pages[pk].cover; openLb([c], 0); return; }
@@ -976,8 +1191,27 @@ dialog::backdrop{background:rgba(10,14,18,.55)}
     }
     if (a === "sec-add") {
       openDialog({ kind: "section", heading: "New section", isNew: true, draft: { title: "", kicker: "" },
-        commit: d => { pg.sections.push({ id: uid(), title: d.title, kicker: d.kicker, blocks: [] }); } });
+        commit: d => {
+          const nsec = { id: uid(), title: d.title, kicker: d.kicker, blocks: [] }, ri = pg.sections.findIndex(s => s.reflect);
+          if (ri >= 0) pg.sections.splice(ri, 0, nsec); else pg.sections.push(nsec);
+        } });
     }
+    if (a === "lyr-sync") {
+      const b = findBlk(pk, sid, bid), el = t.closest(".b-lyr"), au = el && el.querySelector("audio");
+      if (!b || !au) return;
+      const raw = String(b.lyrics || "").split("\n");
+      const idx = raw.map((r, i) => lyrLines(r)[0].text ? i : -1).filter(i => i >= 0);
+      app.querySelectorAll("audio").forEach(o => { if (!o.paused) o.pause(); });
+      sync = { b: b, el: el, au: au, raw: raw, idx: idx, times: [], i: 0 };
+      t.hidden = true; el.querySelector(".lyr-sync .live").hidden = false;
+      au.muted = false;
+      try { au.currentTime = 0; } catch (_) {}
+      au.play().catch(() => {});
+      syncHint();
+      return;
+    }
+    if (a === "lyr-mark") { syncMark(); return; }
+    if (a === "lyr-stop") { syncEnd(); return; }
     if (a === "sec-edit") {
       const s = findSec(pk, sid);
       openDialog({ kind: "section", heading: "Edit section", draft: { title: s.title, kicker: s.kicker }, commit: d => { s.title = d.title; s.kicker = d.kicker; } });
