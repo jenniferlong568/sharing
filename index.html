@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>The Sharing Project</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Sharing Project</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Gloock&amp;family=Caveat:wght@500&amp;family=Figtree:wght@400;600&amp;display=swap">
 <style id="sp-style">
@@ -437,6 +438,17 @@ main[data-page="creative"] .media-title,main[data-page="creative"] .media-cap{te
 .cr-shuffle{margin-top:2.5rem}
 .cr-note{font-family:var(--f-ui);font-size:.85rem;color:var(--muted);margin:0 0 1.25rem}
 .cr-item.pinned .cr-name::before{content:"★ ";color:var(--gold)}
+/* phones: roomier cards, bigger tap targets */
+@media (max-width:600px){
+.card{flex-wrap:wrap;padding:1rem}
+.card .grow{flex:1 1 12rem}
+.card > .btn,.card > a.btn{margin-left:auto}
+.car-slide{width:90%}
+.car-dots{gap:.15rem;flex-wrap:wrap}
+.car-dots button{width:1.75rem;height:1.75rem;background:radial-gradient(circle,var(--line) 0 .35rem,transparent .36rem)}
+.car-dots button[aria-current="true"]{background:radial-gradient(circle,var(--dc,var(--gold)) 0 .45rem,transparent .46rem);transform:none}
+.tl-node::before{content:"";position:absolute;inset:-.7rem}
+}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
 </style>
 <div id="app"></div>
@@ -2078,4 +2090,5 @@ main[data-page="creative"] .media-title,main[data-page="creative"] .media-cap{te
     render();
   })();
 })();
-</script></body></html>
+</script>
+</body></html>
