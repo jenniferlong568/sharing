@@ -1,4 +1,5 @@
-<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body><title>The Sharing Project</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>The Sharing Project</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400..800;1,400..800&amp;family=Gloock&amp;family=Caveat:wght@500&amp;family=Figtree:wght@400;600&amp;display=swap">
 <style id="sp-style">
@@ -39,8 +40,8 @@ h1,h2,h3{font-family:var(--f-display);font-weight:500;text-wrap:balance;line-hei
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--paper) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;align-items:center;gap:1rem;min-height:3.75rem}
 .brand{font-family:var(--f-display);font-size:1.3rem;text-decoration:none;color:var(--ink);white-space:nowrap;margin-right:auto}
-.nav{display:flex;gap:.15rem;flex-wrap:wrap;font-family:var(--f-ui);font-size:.9rem}
-.nav a{text-decoration:none;color:var(--muted);padding:.4rem .6rem;border-radius:6px;white-space:nowrap}
+.nav{display:flex;gap:.1rem;flex-wrap:nowrap;font-family:var(--f-ui);font-size:.9rem}
+.nav a{text-decoration:none;color:var(--muted);padding:.4rem .45rem;border-radius:6px;white-space:nowrap}
 .nav a:hover{color:var(--ink);background:var(--surface)}
 .nav a[aria-current="page"]{color:var(--ink);background:var(--gold-soft)}
 .nav .sep{width:1px;background:var(--line);margin:.35rem .3rem}
@@ -538,7 +539,9 @@ main[data-page="creative"] .media-title,main[data-page="creative"] .media-cap{te
     }
     if (!s.pages.credits) s.pages.credits = { title: "Sharing", lede: "", cover: null, sections: [{ id: "cr-main", title: "", kicker: "", addLabel: "Add to this page", suggest: ["credits", "text"], blocks: [{ id: "names-1", type: "credits", title: "", items: [] }] }] };
     if (!s.pages.ai) s.pages.ai = { title: "AI Disclosure", lede: "", cover: null, sections: [{ id: "ai-main", title: "", kicker: "", addLabel: "Add to this page", suggest: ["text"], blocks: [{ id: "ai-text-1", type: "text", heading: "", body: "This website was designed and built with help from Claude, an AI assistant made by Anthropic. I described what I wanted each page to look like and do, and Claude wrote the code for the layout, menus, dropdowns, song player, timeline and other features." }] }] };
-    DOMAINS.map(d => ({ key: d.key })).concat([{ key: "sharing" }]).forEach(d => {
+    /* Sharing the Sharing Project has no Reflection; drop it while it is still empty */
+    if (s.pages.sharing) s.pages.sharing.sections = s.pages.sharing.sections.filter(x => !(x.reflect && !x.blocks.length));
+    DOMAINS.forEach(d => {
       const p = s.pages[d.key];
       if (p && !p.sections.some(x => x.reflect)) p.sections.push({ id: "reflection", title: "Reflection", kicker: "", reflect: true, suggest: ["text", "quote", "photos"], blocks: [] });
     });
@@ -2091,4 +2094,5 @@ main[data-page="creative"] .media-title,main[data-page="creative"] .media-cap{te
     render();
   })();
 })();
-</script></body></html>
+</script>
+</body></html>
